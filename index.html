@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SkyLink Airlines - Voos e Reservas</title>
-    <meta name="description" content="Reserve voos com segurança e conforto. Sistema completo de gestão de voos.">
+    <title>SkyLink Airlines</title>
     <style>
         /* Reset e Base */
         * {
@@ -14,25 +13,29 @@
         }
 
         :root {
-            --background: #ffffff;
-            --foreground: #1a202c;
-            --primary: #2c5aa0;
-            --primary-foreground: #ffffff;
-            --secondary: #f0f7ff;
-            --accent: #ff6b35;
-            --accent-foreground: #ffffff;
-            --muted: #f7fafc;
-            --muted-foreground: #718096;
-            --border: #e2e8f0;
-            --card: #ffffff;
-            --danger: #e53e3e;
-            --success: #38a169;
+            /* Aviation-inspired color palette */
+            --background: hsl(0, 0%, 100%);
+            --foreground: hsl(215, 25%, 15%);
+            --primary: hsl(215, 85%, 35%);
+            --primary-foreground: hsl(0, 0%, 100%);
+            --secondary: hsl(205, 85%, 96%);
+            --secondary-foreground: hsl(215, 85%, 35%);
+            --accent: hsl(20, 95%, 55%);
+            --accent-foreground: hsl(0, 0%, 100%);
+            --muted: hsl(210, 40%, 96%);
+            --muted-foreground: hsl(215, 15%, 50%);
+            --border: hsl(215, 20%, 88%);
+            --card: hsl(0, 0%, 100%);
+            --danger: hsl(0, 85%, 45%);
+            --success: hsl(142, 72%, 29%);
             
-            --gradient-primary: linear-gradient(135deg, #2c5aa0 0%, #3a7bd5 100%);
-            --gradient-hero: linear-gradient(135deg, #2c5aa0 0%, #3a7bd5 50%, #ff6b35 100%);
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, hsl(215, 85%, 35%) 0%, hsl(215, 85%, 45%) 100%);
+            --gradient-hero: linear-gradient(135deg, hsl(215, 85%, 35%) 0%, hsl(215, 85%, 50%) 50%, hsl(20, 95%, 55%) 100%);
             
-            --shadow-soft: 0 2px 20px -4px rgba(44, 90, 160, 0.15);
-            --shadow-elevation: 0 4px 30px -6px rgba(44, 90, 160, 0.25);
+            /* Shadows */
+            --shadow-soft: 0 2px 20px -4px hsl(215, 85%, 35%, 0.15);
+            --shadow-elevation: 0 4px 30px -6px hsl(215, 85%, 35%, 0.25);
         }
 
         body {
@@ -96,30 +99,6 @@
             color: var(--muted-foreground);
         }
 
-        .nav {
-            display: none;
-            gap: 1.5rem;
-        }
-
-        .nav a {
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--foreground);
-            text-decoration: none;
-            transition: color 0.3s;
-            cursor: pointer;
-        }
-
-        .nav a:hover {
-            color: var(--primary);
-        }
-
-        @media (min-width: 768px) {
-            .nav {
-                display: flex;
-            }
-        }
-
         .header-buttons {
             display: flex;
             gap: 0.75rem;
@@ -133,7 +112,7 @@
             border: none;
             border-radius: 0.5rem;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: inline-flex;
             align-items: center;
             justify-content: center;
@@ -149,13 +128,13 @@
             background: var(--muted);
         }
 
-        .btn-primary {
+        .btn-hero {
             background: var(--gradient-primary);
             color: var(--primary-foreground);
             box-shadow: var(--shadow-soft);
         }
 
-        .btn-primary:hover {
+        .btn-hero:hover {
             transform: translateY(-2px);
             box-shadow: var(--shadow-elevation);
         }
@@ -171,6 +150,16 @@
             box-shadow: var(--shadow-elevation);
         }
 
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--primary-foreground);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
         .btn-lg {
             padding: 0.75rem 2rem;
             font-size: 1rem;
@@ -178,11 +167,6 @@
 
         .btn-full {
             width: 100%;
-        }
-
-        .btn-danger {
-            background: var(--danger);
-            color: white;
         }
 
         /* Hero Section */
@@ -193,16 +177,21 @@
             justify-content: center;
             position: relative;
             overflow: hidden;
-            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
-                        url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80') center/cover;
+            background: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80') center/cover;
             margin-top: 72px;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, hsla(215, 85%, 35%, 0.9) 0%, hsla(215, 85%, 35%, 0.7) 50%, transparent 100%);
         }
 
         .hero-content {
             position: relative;
             z-index: 10;
             text-align: center;
-            color: white;
+            color: var(--primary-foreground);
         }
 
         .hero-content h1 {
@@ -228,7 +217,7 @@
 
         /* Search Section */
         .search-section {
-            padding: 4rem 0;
+            padding: 8rem 0 3rem 0;
             background: var(--secondary);
         }
 
@@ -246,7 +235,6 @@
             font-weight: bold;
             margin-bottom: 1.5rem;
             color: var(--foreground);
-            text-align: center;
         }
 
         .form-grid {
@@ -259,6 +247,10 @@
         @media (min-width: 768px) {
             .form-grid {
                 grid-template-columns: 1fr 1fr;
+            }
+            
+            .search-card {
+                padding: 3rem;
             }
         }
 
@@ -305,6 +297,12 @@
             color: var(--foreground);
         }
 
+        @media (min-width: 768px) {
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+        }
+
         .section-header p {
             color: var(--muted-foreground);
             max-width: 700px;
@@ -335,7 +333,6 @@
             border: 1px solid var(--border);
             border-radius: 0.75rem;
             transition: all 0.3s;
-            text-align: center;
         }
 
         .feature-card:hover {
@@ -352,7 +349,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1rem;
+            margin-bottom: 1rem;
             color: var(--primary-foreground);
         }
 
@@ -368,106 +365,111 @@
             font-size: 0.875rem;
         }
 
-        /* Dashboard Styles */
-        .dashboard {
-            padding: 6rem 0 2rem 0;
-            min-height: calc(100vh - 72px);
-            display: none;
+        /* CTA Section */
+        .cta-section {
+            padding: 4rem 0;
+            background: var(--gradient-hero);
+            text-align: center;
+            color: var(--primary-foreground);
         }
 
-        .dashboard.active {
-            display: block;
-        }
-
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 2rem;
-        }
-
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.5rem;
+        .cta-section h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
         }
 
         @media (min-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .cta-section h2 {
+                font-size: 2.5rem;
             }
         }
 
-        @media (min-width: 1024px) {
-            .dashboard-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
+        .cta-section p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
         }
 
-        .dashboard-card {
-            padding: 1.5rem;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 0.75rem;
-            box-shadow: var(--shadow-soft);
-        }
-
-        .dashboard-card h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--foreground);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
             gap: 1rem;
+            justify-content: center;
+            align-items: center;
         }
 
-        .stat-card {
-            padding: 1rem;
-            background: var(--muted);
-            border-radius: 0.5rem;
-            text-align: center;
+        @media (min-width: 640px) {
+            .cta-buttons {
+                flex-direction: row;
+            }
         }
 
-        .stat-value {
-            font-size: 1.5rem;
+        /* Footer */
+        .footer {
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .footer h3 {
             font-weight: bold;
-            color: var(--primary);
+            color: var(--foreground);
+            margin-bottom: 1rem;
         }
 
-        .stat-label {
+        .footer h4 {
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 1rem;
+        }
+
+        .footer p {
             font-size: 0.875rem;
             color: var(--muted-foreground);
         }
 
-        /* Table Styles */
-        .table-container {
-            overflow-x: auto;
+        .footer ul {
+            list-style: none;
         }
 
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
+        .footer li {
+            margin-bottom: 0.5rem;
         }
 
-        .data-table th,
-        .data-table td {
-            padding: 0.75rem;
-            text-align: left;
-            border-bottom: 1px solid var(--border);
+        .footer a {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: color 0.3s;
         }
 
-        .data-table th {
-            font-weight: 600;
-            color: var(--foreground);
-            background: var(--muted);
+        .footer a:hover {
+            color: var(--primary);
         }
 
-        .data-table tr:hover {
-            background: var(--muted);
+        .footer-bottom {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
         }
 
         /* Modal Styles */
@@ -539,21 +541,93 @@
         }
 
         .alert-success {
-            background: rgba(56, 161, 105, 0.1);
-            border: 1px solid var(--success);
-            color: var(--success);
+            background: hsl(142, 72%, 29%, 0.1);
+            border: 1px solid hsl(142, 72%, 29%);
+            color: hsl(142, 72%, 29%);
         }
 
         .alert-warning {
-            background: rgba(245, 158, 11, 0.1);
-            border: 1px solid #f59e0b;
-            color: #f59e0b;
+            background: hsl(38, 92%, 50%, 0.1);
+            border: 1px solid hsl(38, 92%, 50%);
+            color: hsl(38, 92%, 50%);
         }
 
         .alert-danger {
-            background: rgba(229, 62, 62, 0.1);
-            border: 1px solid var(--danger);
-            color: var(--danger);
+            background: hsl(0, 85%, 45%, 0.1);
+            border: 1px solid hsl(0, 85%, 45%);
+            color: hsl(0, 85%, 45%);
+        }
+
+        /* Login/Register Styles */
+        .auth-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--gradient-hero);
+        }
+
+        .auth-card {
+            background: var(--card);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--shadow-elevation);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--muted-foreground);
+            border-bottom: 2px solid transparent;
+        }
+
+        .auth-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .role-option {
+            flex: 1;
+            padding: 0.5rem;
+            text-align: center;
+            background: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .role-option.active {
+            background: var(--primary);
+            color: var(--primary-foreground);
+            border-color: var(--primary);
         }
 
         /* Flight Results */
@@ -592,20 +666,7 @@
             color: var(--primary);
         }
 
-        /* Footer */
-        .footer {
-            background: var(--card);
-            border-top: 1px solid var(--border);
-            padding: 2rem 0;
-            text-align: center;
-        }
-
-        .footer p {
-            font-size: 0.875rem;
-            color: var(--muted-foreground);
-        }
-
-        /* Profile Panel */
+        /* Painel Lateral de Troca de Perfil */
         .profile-panel {
             position: fixed;
             top: 0;
@@ -646,6 +707,16 @@
             font-size: 1.5rem;
             cursor: pointer;
             color: var(--muted-foreground);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.25rem;
+        }
+
+        .close-panel:hover {
+            background: var(--muted);
         }
 
         .profile-options {
@@ -679,6 +750,15 @@
             color: var(--primary-foreground);
         }
 
+        .profile-option input[type="radio"]:checked + .profile-content .profile-icon {
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--primary-foreground);
+        }
+
+        .profile-option input[type="radio"]:checked + .profile-content .profile-info span {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
         .profile-icon {
             width: 40px;
             height: 40px;
@@ -706,6 +786,7 @@
             color: var(--muted-foreground);
         }
 
+        /* Botão de toggle do painel */
         .profile-panel-toggle {
             position: fixed;
             top: 50%;
@@ -727,6 +808,7 @@
             padding-right: 1rem;
         }
 
+        /* Overlay quando o painel está aberto */
         .panel-overlay {
             position: fixed;
             top: 0;
@@ -752,9 +834,9 @@
                 <button class="close-modal" onclick="closeAuthModal()">&times;</button>
             </div>
             
-            <div class="auth-tabs" style="display: flex; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border);">
-                <button class="auth-tab active" onclick="switchAuthTab('login')" style="flex: 1; padding: 0.75rem; text-align: center; background: none; border: none; cursor: pointer; font-weight: 500; color: var(--muted-foreground); border-bottom: 2px solid transparent;">Entrar</button>
-                <button class="auth-tab" onclick="switchAuthTab('register')" style="flex: 1; padding: 0.75rem; text-align: center; background: none; border: none; cursor: pointer; font-weight: 500; color: var(--muted-foreground); border-bottom: 2px solid transparent;">Cadastrar</button>
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Entrar</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')">Cadastrar</button>
             </div>
             
             <form id="loginForm" class="auth-form active">
@@ -776,7 +858,7 @@
                 </div>
             </form>
             
-            <form id="registerForm" class="auth-form" style="display: none;">
+            <form id="registerForm" class="auth-form">
                 <div class="form-group">
                     <label for="registerName">Nome Completo</label>
                     <input type="text" id="registerName" class="input" required>
@@ -791,10 +873,10 @@
                 </div>
                 <div class="form-group">
                     <label for="registerRole">Tipo de Usuário</label>
-                    <div class="role-selector" style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                        <div class="role-option active" data-role="passenger" style="flex: 1; padding: 0.5rem; text-align: center; background: var(--muted); border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem;">Passageiro</div>
-                        <div class="role-option" data-role="agent" style="flex: 1; padding: 0.5rem; text-align: center; background: var(--muted); border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem;">Agente</div>
-                        <div class="role-option" data-role="admin" style="flex: 1; padding: 0.5rem; text-align: center; background: var(--muted); border: 1px solid var(--border); border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem;">Administrador</div>
+                    <div class="role-selector">
+                        <div class="role-option active" data-role="passenger">Passageiro</div>
+                        <div class="role-option" data-role="agent">Agente</div>
+                        <div class="role-option" data-role="admin">Administrador</div>
                     </div>
                     <input type="hidden" id="registerRole" value="passenger">
                 </div>
@@ -807,7 +889,7 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo" onclick="showHome()">
+                <div class="logo" onclick="showSection('hero')">
                     <div class="logo-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
@@ -818,16 +900,10 @@
                         <p>Airlines</p>
                     </div>
                 </div>
-                
-                <nav class="nav">
-                    <a onclick="showHome()">Início</a>
-                    <a onclick="showSection('search')">Voos</a>
-                    <a onclick="showSection('features')">Serviços</a>
-                </nav>
 
                 <div class="header-buttons" id="headerButtons">
                     <button class="btn btn-ghost" onclick="openAuthModal()">Entrar</button>
-                    <button class="btn btn-primary" onclick="openAuthModal()">Cadastrar</button>
+                    <button class="btn btn-hero" onclick="openAuthModal()">Cadastrar</button>
                 </div>
 
                 <div class="header-buttons" id="userMenu" style="display: none;">
@@ -842,15 +918,16 @@
     <main id="mainContent">
         <!-- Hero Section -->
         <section class="hero" id="hero">
+            <div class="hero-overlay"></div>
             <div class="container hero-content">
                 <h1>Voe para onde seus sonhos te levam</h1>
                 <p>Reserve voos com segurança, conforto e os melhores preços. Sua próxima aventura começa aqui.</p>
-                <button class="btn btn-accent btn-lg" onclick="showSection('search')">Explorar Voos</button>
+                <button class="btn btn-accent btn-lg" onclick="showSection('search')">Explorar Destinos</button>
             </div>
         </section>
 
         <!-- Flight Search Section -->
-        <section class="search-section" id="search" style="display: none;">
+        <section class="search-section" id="search">
             <div class="container">
                 <div class="search-card">
                     <h2>Buscar Voos</h2>
@@ -908,7 +985,7 @@
         </section>
 
         <!-- Features Section -->
-        <section id="features" class="features-section" style="display: none;">
+        <section id="about" class="features-section">
             <div class="container">
                 <div class="section-header">
                     <h2>Por que escolher a SkyLink?</h2>
@@ -984,100 +1061,14 @@
             </div>
         </section>
 
-        <!-- Dashboard Sections -->
-        <section id="adminDashboard" class="dashboard">
+        <!-- CTA Section -->
+        <section class="cta-section">
             <div class="container">
-                <div class="dashboard-header">
-                    <h2>Painel Administrativo</h2>
-                    <button class="btn btn-accent" onclick="showModal('flightModal')">Adicionar Voo</button>
-                </div>
-                
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-value" id="totalFlights">0</div>
-                        <div class="stat-label">Voos Cadastrados</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="totalBookings">0</div>
-                        <div class="stat-label">Reservas Ativas</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="overbookingCases">0</div>
-                        <div class="stat-label">Casos de Overbooking</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value" id="occupancyRate">0%</div>
-                        <div class="stat-label">Taxa de Ocupação</div>
-                    </div>
-                </div>
-                
-                <div class="dashboard-grid">
-                    <div class="dashboard-card">
-                        <h3>Gerenciar Voos</h3>
-                        <div class="table-container">
-                            <table class="data-table" id="flightsTable">
-                                <thead>
-                                    <tr>
-                                        <th>Código</th>
-                                        <th>Origem</th>
-                                        <th>Destino</th>
-                                        <th>Data</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                    
-                    <div class="dashboard-card">
-                        <h3>Políticas de Overbooking</h3>
-                        <div class="form-group">
-                            <label for="overbookingPercentage">Percentual Máximo de Overbooking</label>
-                            <input type="number" id="overbookingPercentage" class="input" min="0" max="20" value="10">
-                        </div>
-                        <div class="form-group">
-                            <label for="compensationOptions">Opções de Compensação</label>
-                            <textarea id="compensationOptions" class="input" rows="4">Voucher de 150% do valor, Upgrade de classe, Reacomodação no próximo voo, Reembolso integral</textarea>
-                        </div>
-                        <button class="btn btn-accent btn-full" onclick="saveOverbookingPolicy()">Salvar Política</button>
-                    </div>
-                    
-                    <div class="dashboard-card">
-                        <h3>Gerenciar Usuários</h3>
-                        <div class="table-container">
-                            <table class="data-table" id="usersTable">
-                                <thead>
-                                    <tr>
-                                        <th>Nome</th>
-                                        <th>Email</th>
-                                        <th>Tipo</th>
-                                        <th>Ações</th>
-                                    </tr>
-                                </thead>
-                                <tbody></tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="passengerDashboard" class="dashboard">
-            <div class="container">
-                <div class="dashboard-header">
-                    <h2>Minhas Reservas</h2>
-                    <button class="btn btn-accent" onclick="showSection('search')">Buscar Voos</button>
-                </div>
-                
-                <div id="passengerOverbookingAlert" class="alert alert-warning" style="display: none;">
-                    <h3>Seu voo está com overbooking</h3>
-                    <p>Verifique as opções de compensação disponíveis abaixo.</p>
-                </div>
-                
-                <div class="dashboard-card">
-                    <h3>Minhas Reservas</h3>
-                    <div id="passengerBookingsList"></div>
+                <h2>Pronto para decolar?</h2>
+                <p>Junte-se a milhões de viajantes que confiam na SkyLink para suas jornadas</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-accent btn-lg" onclick="openAuthModal()">Criar Conta Grátis</button>
+                    <button class="btn btn-outline btn-lg">Baixar App</button>
                 </div>
             </div>
         </section>
@@ -1086,53 +1077,43 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <p>© 2025 SkyLink Airlines. Todos os direitos reservados.</p>
+            <div class="footer-grid">
+                <div>
+                    <h3>SkyLink Airlines</h3>
+                    <p>Conectando pessoas e destinos desde 2025</p>
+                </div>
+                <div>
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="#">Sobre nós</a></li>
+                        <li><a href="#">Carreiras</a></li>
+                        <li><a href="#">Imprensa</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Termos de Uso</a></li>
+                        <li><a href="#">Privacidade</a></li>
+                        <li><a href="#">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2025 SkyLink Airlines. Todos os direitos reservados.
+            </div>
         </div>
     </footer>
 
-    <!-- Flight Modal -->
-    <div id="flightModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 class="modal-title" id="flightModalTitle">Adicionar Voo</h2>
-                <button class="close-modal" onclick="closeModal('flightModal')">&times;</button>
-            </div>
-            <form id="flightForm">
-                <input type="hidden" id="flightId">
-                <div class="form-group">
-                    <label for="flightCode">Código do Voo</label>
-                    <input type="text" id="flightCode" class="input" required>
-                </div>
-                <div class="form-group">
-                    <label for="flightOrigin">Origem</label>
-                    <input type="text" id="flightOriginModal" class="input" required>
-                </div>
-                <div class="form-group">
-                    <label for="flightDestination">Destino</label>
-                    <input type="text" id="flightDestinationModal" class="input" required>
-                </div>
-                <div class="form-group">
-                    <label for="flightDateModal">Data</label>
-                    <input type="date" id="flightDateModal" class="input" required>
-                </div>
-                <div class="form-group">
-                    <label for="flightTime">Horário</label>
-                    <input type="time" id="flightTime" class="input" required>
-                </div>
-                <div class="form-group">
-                    <label for="flightCapacity">Capacidade</label>
-                    <input type="number" id="flightCapacity" class="input" min="1" required>
-                </div>
-                <div class="form-group">
-                    <label for="flightPrice">Preço (R$)</label>
-                    <input type="number" id="flightPrice" class="input" min="0" step="0.01" required>
-                </div>
-                <button type="submit" class="btn btn-accent btn-full">Salvar Voo</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Profile Panel -->
+    <!-- Painel Lateral de Troca de Perfil -->
     <div id="profilePanel" class="profile-panel">
         <div class="profile-panel-header">
             <h3>Trocar Perfil</h3>
@@ -1191,7 +1172,7 @@
         <button class="btn btn-accent btn-full" onclick="applyProfile()">Aplicar Perfil</button>
     </div>
 
-    <!-- Profile Panel Toggle -->
+    <!-- Botão para abrir o painel -->
     <button id="profilePanelToggle" class="profile-panel-toggle" onclick="toggleProfilePanel()">
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
@@ -1200,8 +1181,6 @@
             <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
     </button>
-
-    <div class="panel-overlay" onclick="toggleProfilePanel()"></div>
 
     <script>
         // Data Storage
@@ -1275,6 +1254,61 @@
                         capacity: 180,
                         price: 459.99,
                         bookings: [105, 106, 107, 108]
+                    },
+                    {
+                        id: 4,
+                        code: 'SK404',
+                        origin: 'Rio de Janeiro (GIG)',
+                        destination: 'Florianópolis (FLN)',
+                        date: '2025-04-17',
+                        time: '14:15',
+                        capacity: 120,
+                        price: 389.99,
+                        bookings: []
+                    },
+                    {
+                        id: 5,
+                        code: 'SK505',
+                        origin: 'São Paulo (GRU)',
+                        destination: 'Miami (MIA)',
+                        date: '2025-04-20',
+                        time: '22:00',
+                        capacity: 250,
+                        price: 1899.99,
+                        bookings: [109, 110]
+                    },
+                    {
+                        id: 6,
+                        code: 'SK606',
+                        origin: 'São Paulo (GRU)',
+                        destination: 'Lisboa (LIS)',
+                        date: '2025-04-25',
+                        time: '20:30',
+                        capacity: 280,
+                        price: 2299.99,
+                        bookings: [111]
+                    },
+                    {
+                        id: 7,
+                        code: 'SK707',
+                        origin: 'São Paulo (GRU)',
+                        destination: 'Buenos Aires (EZE)',
+                        date: '2025-04-18',
+                        time: '16:45',
+                        capacity: 140,
+                        price: 899.99,
+                        bookings: [112, 113, 114, 115]
+                    },
+                    {
+                        id: 8,
+                        code: 'SK808',
+                        origin: 'Rio de Janeiro (GIG)',
+                        destination: 'Orlando (MCO)',
+                        date: '2025-04-22',
+                        time: '21:15',
+                        capacity: 220,
+                        price: 1599.99,
+                        bookings: []
                     }
                 ];
                 localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(defaultFlights));
@@ -1285,7 +1319,18 @@
                     { id: 101, flightId: 1, userId: 3, passengers: 2, status: 'confirmed', bookingDate: '2025-03-01' },
                     { id: 102, flightId: 1, userId: 5, passengers: 1, status: 'confirmed', bookingDate: '2025-03-02' },
                     { id: 103, flightId: 1, userId: 6, passengers: 3, status: 'confirmed', bookingDate: '2025-03-03' },
-                    { id: 104, flightId: 2, userId: 7, passengers: 1, status: 'confirmed', bookingDate: '2025-03-04' }
+                    { id: 104, flightId: 2, userId: 7, passengers: 1, status: 'confirmed', bookingDate: '2025-03-04' },
+                    { id: 105, flightId: 3, userId: 8, passengers: 2, status: 'confirmed', bookingDate: '2025-03-05' },
+                    { id: 106, flightId: 3, userId: 9, passengers: 1, status: 'confirmed', bookingDate: '2025-03-06' },
+                    { id: 107, flightId: 3, userId: 10, passengers: 4, status: 'confirmed', bookingDate: '2025-03-07' },
+                    { id: 108, flightId: 3, userId: 11, passengers: 2, status: 'confirmed', bookingDate: '2025-03-08' },
+                    { id: 109, flightId: 5, userId: 12, passengers: 1, status: 'confirmed', bookingDate: '2025-03-09' },
+                    { id: 110, flightId: 5, userId: 13, passengers: 2, status: 'confirmed', bookingDate: '2025-03-10' },
+                    { id: 111, flightId: 6, userId: 14, passengers: 1, status: 'confirmed', bookingDate: '2025-03-11' },
+                    { id: 112, flightId: 7, userId: 15, passengers: 1, status: 'confirmed', bookingDate: '2025-03-12' },
+                    { id: 113, flightId: 7, userId: 16, passengers: 2, status: 'confirmed', bookingDate: '2025-03-13' },
+                    { id: 114, flightId: 7, userId: 17, passengers: 1, status: 'confirmed', bookingDate: '2025-03-14' },
+                    { id: 115, flightId: 7, userId: 18, passengers: 3, status: 'confirmed', bookingDate: '2025-03-15' }
                 ];
                 localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(defaultBookings));
             }
@@ -1317,10 +1362,10 @@
 
         function switchAuthTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.auth-form').forEach(f => f.style.display = 'none');
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
             
             document.querySelector(`.auth-tab[onclick="switchAuthTab('${tab}')"]`).classList.add('active');
-            document.getElementById(`${tab}Form`).style.display = 'block';
+            document.getElementById(`${tab}Form`).classList.add('active');
         }
 
         // Role selection
@@ -1389,7 +1434,7 @@
             currentUser = null;
             localStorage.removeItem('currentUser');
             updateUIForUser();
-            showHome();
+            showSection('hero');
             showAlert('Logout realizado com sucesso!', 'success');
         }
 
@@ -1402,52 +1447,27 @@
                 headerButtons.style.display = 'none';
                 userMenu.style.display = 'flex';
                 userName.textContent = currentUser.name;
-                
-                // Show appropriate dashboard
-                if (currentUser.role === 'admin') {
-                    showSection('adminDashboard');
-                    loadAdminDashboard();
-                } else {
-                    showSection('passengerDashboard');
-                    loadPassengerDashboard();
-                }
             } else {
                 headerButtons.style.display = 'flex';
                 userMenu.style.display = 'none';
-                showHome();
+                showSection('hero');
             }
         }
 
         // Section Navigation
-        function showHome() {
-            document.getElementById('hero').style.display = 'flex';
-            document.getElementById('search').style.display = 'none';
-            document.getElementById('features').style.display = 'none';
-            document.getElementById('adminDashboard').classList.remove('active');
-            document.getElementById('passengerDashboard').classList.remove('active');
-        }
-
         function showSection(sectionId) {
-            document.getElementById('hero').style.display = 'none';
-            document.getElementById('search').style.display = 'none';
-            document.getElementById('features').style.display = 'none';
-            document.getElementById('adminDashboard').classList.remove('active');
-            document.getElementById('passengerDashboard').classList.remove('active');
+            document.querySelectorAll('section').forEach(section => {
+                section.style.display = 'none';
+            });
             
-            if (sectionId === 'search' || sectionId === 'features') {
-                document.getElementById(sectionId).style.display = 'block';
-            } else if (sectionId === 'adminDashboard' || sectionId === 'passengerDashboard') {
-                document.getElementById(sectionId).classList.add('active');
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
             }
-        }
-
-        // Modal Functions
-        function showModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
+            
+            if (sectionId === 'hero' || sectionId === 'search' || sectionId === 'about') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
 
         // Alert System
@@ -1455,18 +1475,11 @@
             const alert = document.createElement('div');
             alert.className = `alert alert-${type}`;
             alert.textContent = message;
-            alert.style.position = 'fixed';
-            alert.style.top = '100px';
-            alert.style.right = '20px';
-            alert.style.zIndex = '1000';
-            alert.style.maxWidth = '300px';
             
             document.body.appendChild(alert);
             
             setTimeout(() => {
-                if (alert.parentNode) {
-                    alert.remove();
-                }
+                alert.remove();
             }, 5000);
         }
 
@@ -1477,8 +1490,8 @@
             const date = document.getElementById('flightDate').value;
             const passengers = document.getElementById('flightPassengers').value;
             
-            if (!currentUser || currentUser.role !== 'passenger') {
-                showAlert('Faça login como passageiro para buscar voos!', 'warning');
+            if (!currentUser) {
+                showAlert('Faça login para buscar voos!', 'warning');
                 openAuthModal();
                 return;
             }
@@ -1573,259 +1586,6 @@
             localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
             
             showAlert(`Reserva confirmada para ${passengers} passageiro(s)!`, 'success');
-            loadPassengerDashboard();
-            showSection('passengerDashboard');
-        }
-
-        // Admin Dashboard Functions
-        function loadAdminDashboard() {
-            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
-            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
-            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
-            
-            // Update stats
-            document.getElementById('totalFlights').textContent = flights.length;
-            document.getElementById('totalBookings').textContent = bookings.filter(b => b.status === 'confirmed').length;
-            
-            // Calculate overbooking cases
-            const overbookingCases = flights.filter(flight => 
-                flight.bookings.length > flight.capacity
-            ).length;
-            document.getElementById('overbookingCases').textContent = overbookingCases;
-            
-            // Calculate occupancy rate
-            const totalCapacity = flights.reduce((sum, flight) => sum + flight.capacity, 0);
-            const totalBookings = flights.reduce((sum, flight) => sum + flight.bookings.length, 0);
-            const occupancyRate = totalCapacity > 0 ? Math.round((totalBookings / totalCapacity) * 100) : 0;
-            document.getElementById('occupancyRate').textContent = `${occupancyRate}%`;
-            
-            // Load flights table
-            const flightsTableBody = document.querySelector('#flightsTable tbody');
-            flightsTableBody.innerHTML = flights.map(flight => `
-                <tr>
-                    <td>${flight.code}</td>
-                    <td>${flight.origin}</td>
-                    <td>${flight.destination}</td>
-                    <td>${formatDate(flight.date)}</td>
-                    <td>
-                        <button class="btn btn-ghost" onclick="editFlight(${flight.id})">Editar</button>
-                        <button class="btn btn-danger" onclick="deleteFlight(${flight.id})">Excluir</button>
-                    </td>
-                </tr>
-            `).join('');
-            
-            // Load users table
-            const usersTableBody = document.querySelector('#usersTable tbody');
-            usersTableBody.innerHTML = users.map(user => `
-                <tr>
-                    <td>${user.name}</td>
-                    <td>${user.email}</td>
-                    <td>${user.role}</td>
-                    <td>
-                        ${user.id !== currentUser.id ? 
-                            `<button class="btn btn-danger" onclick="deleteUser(${user.id})">Excluir</button>` : 
-                            '<span>Usuário atual</span>'
-                        }
-                    </td>
-                </tr>
-            `).join('');
-            
-            // Load overbooking policy
-            const policy = JSON.parse(localStorage.getItem(STORAGE_KEYS.OVERBOOKING_POLICY) || '{}');
-            document.getElementById('overbookingPercentage').value = policy.maxOverbookingPercentage || 10;
-            document.getElementById('compensationOptions').value = 
-                (policy.compensationOptions || []).join(', ');
-        }
-
-        function saveOverbookingPolicy() {
-            const percentage = document.getElementById('overbookingPercentage').value;
-            const options = document.getElementById('compensationOptions').value.split(',').map(o => o.trim());
-            
-            const policy = {
-                maxOverbookingPercentage: parseInt(percentage),
-                compensationOptions: options
-            };
-            
-            localStorage.setItem(STORAGE_KEYS.OVERBOOKING_POLICY, JSON.stringify(policy));
-            showAlert('Política de overbooking salva com sucesso!', 'success');
-        }
-
-        // Flight form submission
-        document.getElementById('flightForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const flightId = document.getElementById('flightId').value;
-            const code = document.getElementById('flightCode').value;
-            const origin = document.getElementById('flightOriginModal').value;
-            const destination = document.getElementById('flightDestinationModal').value;
-            const date = document.getElementById('flightDateModal').value;
-            const time = document.getElementById('flightTime').value;
-            const capacity = document.getElementById('flightCapacity').value;
-            const price = document.getElementById('flightPrice').value;
-            
-            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
-            
-            if (flightId) {
-                // Edit existing flight
-                const index = flights.findIndex(f => f.id === parseInt(flightId));
-                if (index !== -1) {
-                    flights[index] = {
-                        ...flights[index],
-                        code,
-                        origin,
-                        destination,
-                        date,
-                        time,
-                        capacity: parseInt(capacity),
-                        price: parseFloat(price)
-                    };
-                }
-            } else {
-                // Add new flight
-                const newFlight = {
-                    id: flights.length > 0 ? Math.max(...flights.map(f => f.id)) + 1 : 1,
-                    code,
-                    origin,
-                    destination,
-                    date,
-                    time,
-                    capacity: parseInt(capacity),
-                    price: parseFloat(price),
-                    bookings: []
-                };
-                flights.push(newFlight);
-            }
-            
-            localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
-            closeModal('flightModal');
-            loadAdminDashboard();
-            showAlert('Voo salvo com sucesso!', 'success');
-        });
-
-        function editFlight(flightId) {
-            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
-            const flight = flights.find(f => f.id === flightId);
-            
-            if (flight) {
-                document.getElementById('flightModalTitle').textContent = 'Editar Voo';
-                document.getElementById('flightId').value = flight.id;
-                document.getElementById('flightCode').value = flight.code;
-                document.getElementById('flightOriginModal').value = flight.origin;
-                document.getElementById('flightDestinationModal').value = flight.destination;
-                document.getElementById('flightDateModal').value = flight.date;
-                document.getElementById('flightTime').value = flight.time;
-                document.getElementById('flightCapacity').value = flight.capacity;
-                document.getElementById('flightPrice').value = flight.price;
-                
-                showModal('flightModal');
-            }
-        }
-
-        function deleteFlight(flightId) {
-            if (confirm('Tem certeza que deseja excluir este voo?')) {
-                const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
-                const filteredFlights = flights.filter(f => f.id !== flightId);
-                localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(filteredFlights));
-                loadAdminDashboard();
-                showAlert('Voo excluído com sucesso!', 'success');
-            }
-        }
-
-        function deleteUser(userId) {
-            if (confirm('Tem certeza que deseja excluir este usuário?')) {
-                const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
-                const filteredUsers = users.filter(u => u.id !== userId);
-                localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(filteredUsers));
-                loadAdminDashboard();
-                showAlert('Usuário excluído com sucesso!', 'success');
-            }
-        }
-
-        // Passenger Dashboard Functions
-        function loadPassengerDashboard() {
-            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
-            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
-            const userBookings = bookings.filter(b => b.userId === currentUser.id && b.status === 'confirmed');
-            
-            // Check for overbooking in passenger's flights
-            const hasOverbooking = userBookings.some(booking => {
-                const flight = flights.find(f => f.id === booking.flightId);
-                return flight && flight.bookings.length > flight.capacity;
-            });
-            
-            if (hasOverbooking) {
-                document.getElementById('passengerOverbookingAlert').style.display = 'block';
-            } else {
-                document.getElementById('passengerOverbookingAlert').style.display = 'none';
-            }
-            
-            // Display passenger bookings
-            document.getElementById('passengerBookingsList').innerHTML = userBookings.map(booking => {
-                const flight = flights.find(f => f.id === booking.flightId);
-                if (!flight) return '';
-                
-                const isOverbooked = flight.bookings.length > flight.capacity;
-                
-                return `
-                    <div class="flight-card ${isOverbooked ? 'alert-warning' : ''}">
-                        <div class="flight-header">
-                            <div class="flight-route">
-                                <h3>Voo ${flight.code}</h3>
-                                <p><strong>${flight.origin}</strong> → <strong>${flight.destination}</strong></p>
-                                <p>${formatDate(flight.date)} às ${flight.time}</p>
-                            </div>
-                            <div class="flight-price">
-                                R$ ${flight.price.toFixed(2)}
-                            </div>
-                        </div>
-                        <p><strong>Passageiros:</strong> ${booking.passengers}</p>
-                        <p><strong>Status:</strong> ${booking.status === 'confirmed' ? 'Confirmado' : 'Cancelado'}</p>
-                        <p><strong>Data da Reserva:</strong> ${formatDate(booking.bookingDate)}</p>
-                        ${isOverbooked ? `
-                            <div class="alert alert-warning">
-                                <p><strong>Este voo está com overbooking.</strong></p>
-                                <p>Você pode receber uma proposta de compensação em breve.</p>
-                            </div>
-                        ` : ''}
-                        <button class="btn btn-danger" onclick="cancelBooking(${booking.id})">Cancelar Reserva</button>
-                    </div>
-                `;
-            }).join('');
-            
-            if (userBookings.length === 0) {
-                document.getElementById('passengerBookingsList').innerHTML = `
-                    <div class="flight-card">
-                        <h3>Nenhuma reserva encontrada</h3>
-                        <p>Você ainda não fez nenhuma reserva. Explore nossos voos disponíveis!</p>
-                        <button class="btn btn-accent" onclick="showSection('search')">Buscar Voos</button>
-                    </div>
-                `;
-            }
-        }
-
-        function cancelBooking(bookingId) {
-            if (confirm('Tem certeza que deseja cancelar esta reserva?')) {
-                const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
-                const bookingIndex = bookings.findIndex(b => b.id === bookingId);
-                
-                if (bookingIndex !== -1) {
-                    // Remove from flight bookings
-                    const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
-                    const flight = flights.find(f => f.bookings.includes(bookingId));
-                    
-                    if (flight) {
-                        flight.bookings = flight.bookings.filter(b => b !== bookingId);
-                        localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
-                    }
-                    
-                    // Update booking status
-                    bookings[bookingIndex].status = 'cancelled';
-                    localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
-                    
-                    showAlert('Reserva cancelada com sucesso!', 'success');
-                    loadPassengerDashboard();
-                }
-            }
         }
 
         // Utility Functions
@@ -1834,13 +1594,26 @@
             return new Date(dateString).toLocaleDateString('pt-BR', options);
         }
 
-        // Profile Panel Functions
+        // Funções para o painel de perfil
         function toggleProfilePanel() {
             const panel = document.getElementById('profilePanel');
             const overlay = document.querySelector('.panel-overlay');
             
             panel.classList.toggle('active');
-            overlay.classList.toggle('active');
+            
+            if (!overlay) {
+                createOverlay();
+            } else {
+                overlay.classList.toggle('active');
+            }
+        }
+
+        function createOverlay() {
+            const overlay = document.createElement('div');
+            overlay.className = 'panel-overlay';
+            overlay.addEventListener('click', toggleProfilePanel);
+            document.body.appendChild(overlay);
+            overlay.classList.add('active');
         }
 
         function applyProfile() {
@@ -1870,6 +1643,47 @@
             }
         }
 
+        // Fechar painel com ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                const panel = document.getElementById('profilePanel');
+                if (panel.classList.contains('active')) {
+                    toggleProfilePanel();
+                }
+            }
+        });
+
+        // Atualizar o radio button baseado no usuário atual
+        function updateProfilePanel() {
+            if (currentUser) {
+                const role = currentUser.role;
+                const radio = document.querySelector(`input[name="profile"][value="${role}"]`);
+                if (radio) {
+                    radio.checked = true;
+                }
+            }
+        }
+
+        // Modificar a função updateUIForUser para incluir a atualização do painel
+        function updateUIForUser() {
+            const headerButtons = document.getElementById('headerButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userName = document.getElementById('userName');
+            
+            if (currentUser) {
+                headerButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+                userName.textContent = currentUser.name;
+                
+                // Atualizar o painel de perfil
+                updateProfilePanel();
+            } else {
+                headerButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+                showSection('hero');
+            }
+        }
+
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             initializeData();
@@ -1884,31 +1698,6 @@
             // Set minimum date for flight search to today
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('flightDate').min = today;
-            document.getElementById('flightDateModal').min = today;
-            
-            // Add click handlers for navigation
-            document.querySelectorAll('.nav a').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    const onclickAttr = this.getAttribute('onclick');
-                    if (onclickAttr) {
-                        const sectionId = onclickAttr.match(/'([^']+)'/)[1];
-                        if (sectionId === 'search' || sectionId === 'features') {
-                            showSection(sectionId);
-                        }
-                    }
-                });
-            });
-            
-            // Close profile panel with ESC key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
-                    const panel = document.getElementById('profilePanel');
-                    if (panel.classList.contains('active')) {
-                        toggleProfilePanel();
-                    }
-                }
-            });
         });
     </script>
 </body>
