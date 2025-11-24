@@ -1,0 +1,1991 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fundamentos de SI - Sistema de Reserva e Gestão de Voos</title>
+    <meta name="description" content="Reserve voos com segurança e conforto. Sistema completo de gestão de voos e overbooking.">
+    <style>
+        /* Reset e Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Aviation-inspired color palette */
+            --background: hsl(0, 0%, 100%);
+            --foreground: hsl(215, 25%, 15%);
+            --primary: hsl(215, 85%, 35%);
+            --primary-foreground: hsl(0, 0%, 100%);
+            --secondary: hsl(205, 85%, 96%);
+            --secondary-foreground: hsl(215, 85%, 35%);
+            --accent: hsl(20, 95%, 55%);
+            --accent-foreground: hsl(0, 0%, 100%);
+            --muted: hsl(210, 40%, 96%);
+            --muted-foreground: hsl(215, 15%, 50%);
+            --border: hsl(215, 20%, 88%);
+            --card: hsl(0, 0%, 100%);
+            --danger: hsl(0, 85%, 45%);
+            --success: hsl(142, 72%, 29%);
+            
+            /* Gradients */
+            --gradient-primary: linear-gradient(135deg, hsl(215, 85%, 35%) 0%, hsl(215, 85%, 45%) 100%);
+            --gradient-hero: linear-gradient(135deg, hsl(215, 85%, 35%) 0%, hsl(215, 85%, 50%) 50%, hsl(20, 95%, 55%) 100%);
+            
+            /* Shadows */
+            --shadow-soft: 0 2px 20px -4px hsl(215, 85%, 35%, 0.15);
+            --shadow-elevation: 0 4px 30px -6px hsl(215, 85%, 35%, 0.25);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--background);
+            color: var(--foreground);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient-primary);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-foreground);
+        }
+
+        .logo-text h1 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--foreground);
+        }
+
+        .logo-text p {
+            font-size: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        .nav {
+            display: none;
+            gap: 1.5rem;
+        }
+
+        .nav a {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--foreground);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav a:hover {
+            color: var(--primary);
+        }
+
+        @media (min-width: 768px) {
+            .nav {
+                display: flex;
+            }
+        }
+
+        .header-buttons {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--foreground);
+        }
+
+        .btn-ghost:hover {
+            background: var(--muted);
+        }
+
+        .btn-hero {
+            background: var(--gradient-primary);
+            color: var(--primary-foreground);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn-hero:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-elevation);
+        }
+
+        .btn-accent {
+            background: var(--accent);
+            color: var(--accent-foreground);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn-accent:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-elevation);
+        }
+
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: var(--primary-foreground);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-lg {
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+        }
+
+        .btn-full {
+            width: 100%;
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&q=80') center/cover;
+            margin-top: 72px;
+        }
+
+        .hero-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, hsla(215, 85%, 35%, 0.9) 0%, hsla(215, 85%, 35%, 0.7) 50%, transparent 100%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            color: var(--primary-foreground);
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        @media (min-width: 768px) {
+            .hero-content h1 {
+                font-size: 3.75rem;
+            }
+        }
+
+        /* Search Section */
+        .search-section {
+            padding: 3rem 0;
+            background: var(--secondary);
+        }
+
+        .search-card {
+            max-width: 900px;
+            margin: -6rem auto 0;
+            padding: 2rem;
+            background: var(--card);
+            border-radius: 1rem;
+            box-shadow: var(--shadow-elevation);
+        }
+
+        .search-card h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            color: var(--foreground);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .search-card {
+                padding: 3rem;
+            }
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group svg {
+            position: absolute;
+            left: 0.75rem;
+            top: 0.75rem;
+            color: var(--muted-foreground);
+        }
+
+        .input {
+            width: 100%;
+            padding: 0.75rem 0.75rem 0.75rem 2.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 4rem 0;
+            background: var(--background);
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-header h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: var(--foreground);
+        }
+
+        @media (min-width: 768px) {
+            .section-header h2 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .section-header p {
+            color: var(--muted-foreground);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .features-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .feature-card {
+            padding: 2rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-elevation);
+            border-color: var(--primary);
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-primary);
+            border-radius: 0.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--primary-foreground);
+        }
+
+        .feature-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--foreground);
+        }
+
+        .feature-card p {
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 4rem 0;
+            background: var(--gradient-hero);
+            text-align: center;
+            color: var(--primary-foreground);
+        }
+
+        .cta-section h2 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .cta-section h2 {
+                font-size: 2.5rem;
+            }
+        }
+
+        .cta-section p {
+            font-size: 1.125rem;
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @media (min-width: 640px) {
+            .cta-buttons {
+                flex-direction: row;
+            }
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--card);
+            border-top: 1px solid var(--border);
+            padding: 2rem 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (min-width: 768px) {
+            .footer-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .footer h3 {
+            font-weight: bold;
+            color: var(--foreground);
+            margin-bottom: 1rem;
+        }
+
+        .footer h4 {
+            font-weight: 600;
+            color: var(--foreground);
+            margin-bottom: 1rem;
+        }
+
+        .footer p {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        .footer ul {
+            list-style: none;
+        }
+
+        .footer li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer a {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            padding-top: 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            padding: 4rem 0;
+            margin-top: 72px;
+            min-height: calc(100vh - 72px);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .dashboard-card {
+            padding: 1.5rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--foreground);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+            background: var(--muted);
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--foreground);
+            background: var(--muted);
+        }
+
+        .data-table tr:hover {
+            background: var(--muted);
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-elevation);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--foreground);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted-foreground);
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--foreground);
+        }
+
+        /* Alert Styles */
+        .alert {
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-success {
+            background: hsl(142, 72%, 29%, 0.1);
+            border: 1px solid hsl(142, 72%, 29%);
+            color: hsl(142, 72%, 29%);
+        }
+
+        .alert-warning {
+            background: hsl(38, 92%, 50%, 0.1);
+            border: 1px solid hsl(38, 92%, 50%);
+            color: hsl(38, 92%, 50%);
+        }
+
+        .alert-danger {
+            background: hsl(0, 85%, 45%, 0.1);
+            border: 1px solid hsl(0, 85%, 45%);
+            color: hsl(0, 85%, 45%);
+        }
+
+        /* Overbooking Styles */
+        .overbooking-alert {
+            background: var(--accent);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .priority-list {
+            list-style: none;
+        }
+
+        .priority-item {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .priority-high {
+            border-left: 4px solid var(--danger);
+        }
+
+        .priority-medium {
+            border-left: 4px solid var(--accent);
+        }
+
+        .priority-low {
+            border-left: 4px solid var(--success);
+        }
+
+        /* Login/Register Styles */
+        .auth-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: var(--gradient-hero);
+        }
+
+        .auth-card {
+            background: var(--card);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: var(--shadow-elevation);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 0.75rem;
+            text-align: center;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 500;
+            color: var(--muted-foreground);
+            border-bottom: 2px solid transparent;
+        }
+
+        .auth-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .auth-form {
+            display: none;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        .role-selector {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .role-option {
+            flex: 1;
+            padding: 0.5rem;
+            text-align: center;
+            background: var(--muted);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .role-option.active {
+            background: var(--primary);
+            color: var(--primary-foreground);
+            border-color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+    <!-- Authentication Modal -->
+    <div id="authModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Acessar SkyLink</h2>
+                <button class="close-modal" onclick="closeAuthModal()">&times;</button>
+            </div>
+            
+            <div class="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthTab('login')">Entrar</button>
+                <button class="auth-tab" onclick="switchAuthTab('register')">Cadastrar</button>
+            </div>
+            
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label for="loginEmail">Email</label>
+                    <input type="email" id="loginEmail" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Senha</label>
+                    <input type="password" id="loginPassword" class="input" required>
+                </div>
+                <button type="submit" class="btn btn-accent btn-full">Entrar</button>
+            </form>
+            
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label for="registerName">Nome Completo</label>
+                    <input type="text" id="registerName" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email</label>
+                    <input type="email" id="registerEmail" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Senha</label>
+                    <input type="password" id="registerPassword" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerRole">Tipo de Usuário</label>
+                    <div class="role-selector">
+                        <div class="role-option active" data-role="passenger">Passageiro</div>
+                        <div class="role-option" data-role="agent">Agente</div>
+                        <div class="role-option" data-role="admin">Administrador</div>
+                    </div>
+                    <input type="hidden" id="registerRole" value="passenger">
+                </div>
+                <button type="submit" class="btn btn-accent btn-full">Cadastrar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
+                        </svg>
+                    </div>
+                    <div class="logo-text">
+                        <h1>SkyLink</h1>
+                        <p>Airlines</p>
+                    </div>
+                </div>
+                
+                <nav class="nav">
+                    <a href="#flights" onclick="showSection('flights')">Voos</a>
+                    <a href="#destinations" onclick="showSection('destinations')">Destinos</a>
+                    <a href="#about" onclick="showSection('about')">Sobre</a>
+                </nav>
+
+                <div class="header-buttons" id="headerButtons">
+                    <button class="btn btn-ghost" onclick="openAuthModal()">Entrar</button>
+                    <button class="btn btn-hero" onclick="openAuthModal()">Cadastrar</button>
+                </div>
+
+                <div class="header-buttons" id="userMenu" style="display: none;">
+                    <span id="userName" style="margin-right: 1rem;"></span>
+                    <button class="btn btn-ghost" onclick="logout()">Sair</button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="mainContent">
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+            <div class="hero-overlay"></div>
+            <div class="container hero-content">
+                <h1>Voe para onde seus sonhos te levam</h1>
+                <p>Reserve voos com segurança, conforto e os melhores preços. Sua próxima aventura começa aqui.</p>
+                <button class="btn btn-accent btn-lg" onclick="showSection('flights')">Explorar Destinos</button>
+            </div>
+        </section>
+
+        <!-- Flight Search Section -->
+        <section class="search-section" id="flights">
+            <div class="container">
+                <div class="search-card">
+                    <h2>Buscar Voos</h2>
+                    
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            <input type="text" placeholder="Origem (ex: São Paulo - GRU)" class="input" id="flightOrigin">
+                        </div>
+                        
+                        <div class="input-group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            <input type="text" placeholder="Destino (ex: Rio de Janeiro - GIG)" class="input" id="flightDestination">
+                        </div>
+                        
+                        <div class="input-group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                            <input type="date" class="input" id="flightDate">
+                        </div>
+                        
+                        <div class="input-group">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                <circle cx="9" cy="7" r="4"/>
+                                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                            </svg>
+                            <input type="number" min="1" max="9" value="1" placeholder="Passageiros" class="input" id="flightPassengers">
+                        </div>
+                    </div>
+
+                    <button class="btn btn-accent btn-lg btn-full" onclick="searchFlights()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.3-4.3"/>
+                        </svg>
+                        Buscar Voos
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section id="about" class="features-section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Por que escolher a SkyLink?</h2>
+                    <p>Oferecemos a melhor experiência de viagem com serviços de qualidade e atendimento excepcional</p>
+                </div>
+
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                            </svg>
+                        </div>
+                        <h3>Voos Seguros</h3>
+                        <p>Frota moderna e manutenção rigorosa para garantir sua segurança em cada voo</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                        </div>
+                        <h3>Pontualidade</h3>
+                        <p>98% de nossos voos decolam no horário. Valorizamos seu tempo</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            </svg>
+                        </div>
+                        <h3>Destinos Globais</h3>
+                        <p>Mais de 150 destinos nacionais e internacionais para você explorar</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                <line x1="1" y1="10" x2="23" y2="10"/>
+                            </svg>
+                        </div>
+                        <h3>Pagamento Flexível</h3>
+                        <p>Parcele em até 12x sem juros e acumule milhas em cada compra</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 11h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5Zm0 0a9 9 0 1 1 18 0m0 0v5a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3Z"/>
+                            </svg>
+                        </div>
+                        <h3>Suporte 24/7</h3>
+                        <p>Atendimento disponível a qualquer hora para ajudar você</p>
+                    </div>
+
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="8" r="7"/>
+                                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/>
+                            </svg>
+                        </div>
+                        <h3>Programa de Milhas</h3>
+                        <p>Acumule pontos e troque por voos, upgrades e muito mais</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section">
+            <div class="container">
+                <h2>Pronto para decolar?</h2>
+                <p>Junte-se a milhões de viajantes que confiam na SkyLink para suas jornadas</p>
+                <div class="cta-buttons">
+                    <button class="btn btn-accent btn-lg" onclick="openAuthModal()">Criar Conta Grátis</button>
+                    <button class="btn btn-outline btn-lg">Baixar App</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dashboard Sections (Hidden by default) -->
+        <section id="adminDashboard" class="dashboard" style="display: none;">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Painel Administrativo</h2>
+                    <button class="btn btn-accent" onclick="showModal('flightModal')">Adicionar Voo</button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalFlights">0</div>
+                        <div class="stat-label">Voos Cadastrados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalBookings">0</div>
+                        <div class="stat-label">Reservas Ativas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="overbookingCases">0</div>
+                        <div class="stat-label">Casos de Overbooking</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="occupancyRate">0%</div>
+                        <div class="stat-label">Taxa de Ocupação</div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Gerenciar Voos</h3>
+                        <div class="table-container">
+                            <table class="data-table" id="flightsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Origem</th>
+                                        <th>Destino</th>
+                                        <th>Data</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Políticas de Overbooking</h3>
+                        <div class="form-group">
+                            <label for="overbookingPercentage">Percentual Máximo de Overbooking</label>
+                            <input type="number" id="overbookingPercentage" class="input" min="0" max="20" value="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="compensationOptions">Opções de Compensação</label>
+                            <textarea id="compensationOptions" class="input" rows="4">Voucher de 150% do valor, Upgrade de classe, Reacomodação no próximo voo, Reembolso integral</textarea>
+                        </div>
+                        <button class="btn btn-accent btn-full" onclick="saveOverbookingPolicy()">Salvar Política</button>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Gerenciar Usuários</h3>
+                        <div class="table-container">
+                            <table class="data-table" id="usersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Email</th>
+                                        <th>Tipo</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="agentDashboard" class="dashboard" style="display: none;">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Painel do Agente</h2>
+                </div>
+                
+                <div id="overbookingAlert" class="overbooking-alert" style="display: none;">
+                    <h3>Alerta de Overbooking!</h3>
+                    <p>Um ou mais voos estão com excesso de passageiros. Verifique a lista abaixo.</p>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Voos com Overbooking</h3>
+                        <div id="overbookingFlightsList"></div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Passageiros por Prioridade</h3>
+                        <ul class="priority-list" id="passengerPriorityList"></ul>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Opções de Compensação</h3>
+                        <div id="compensationOptionsList"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="passengerDashboard" class="dashboard" style="display: none;">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Minhas Reservas</h2>
+                    <button class="btn btn-accent" onclick="showSection('flights')">Buscar Voos</button>
+                </div>
+                
+                <div id="passengerOverbookingAlert" class="alert alert-warning" style="display: none;">
+                    <h3>Seu voo está com overbooking</h3>
+                    <p>Verifique as opções de compensação disponíveis abaixo.</p>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Minhas Reservas</h3>
+                    <div id="passengerBookingsList"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3>SkyLink Airlines</h3>
+                    <p>Conectando pessoas e destinos desde 2025</p>
+                </div>
+                <div>
+                    <h4>Empresa</h4>
+                    <ul>
+                        <li><a href="#">Sobre nós</a></li>
+                        <li><a href="#">Carreiras</a></li>
+                        <li><a href="#">Imprensa</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Suporte</h4>
+                    <ul>
+                        <li><a href="#">Central de Ajuda</a></li>
+                        <li><a href="#">Contato</a></li>
+                        <li><a href="#">FAQ</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Termos de Uso</a></li>
+                        <li><a href="#">Privacidade</a></li>
+                        <li><a href="#">Cookies</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                © 2025 SkyLink Airlines. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Flight Modal -->
+    <div id="flightModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="flightModalTitle">Adicionar Voo</h2>
+                <button class="close-modal" onclick="closeModal('flightModal')">&times;</button>
+            </div>
+            <form id="flightForm">
+                <input type="hidden" id="flightId">
+                <div class="form-group">
+                    <label for="flightCode">Código do Voo</label>
+                    <input type="text" id="flightCode" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightOrigin">Origem</label>
+                    <input type="text" id="flightOriginModal" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightDestination">Destino</label>
+                    <input type="text" id="flightDestinationModal" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightDateModal">Data</label>
+                    <input type="date" id="flightDateModal" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightTime">Horário</label>
+                    <input type="time" id="flightTime" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightCapacity">Capacidade</label>
+                    <input type="number" id="flightCapacity" class="input" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightPrice">Preço (R$)</label>
+                    <input type="number" id="flightPrice" class="input" min="0" step="0.01" required>
+                </div>
+                <button type="submit" class="btn btn-accent btn-full">Salvar Voo</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage
+        const STORAGE_KEYS = {
+            USERS: 'skylink_users',
+            FLIGHTS: 'skylink_flights',
+            BOOKINGS: 'skylink_bookings',
+            OVERBOOKING_POLICY: 'skylink_overbooking_policy'
+        };
+
+        // Initialize data
+        function initializeData() {
+            if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
+                const defaultUsers = [
+                    {
+                        id: 1,
+                        name: 'Administrador',
+                        email: 'admin@skylink.com',
+                        password: 'admin123',
+                        role: 'admin'
+                    },
+                    {
+                        id: 2,
+                        name: 'Agente Teste',
+                        email: 'agente@skylink.com',
+                        password: 'agente123',
+                        role: 'agent'
+                    }
+                ];
+                localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(defaultUsers));
+            }
+
+            if (!localStorage.getItem(STORAGE_KEYS.FLIGHTS)) {
+                const defaultFlights = [
+                    {
+                        id: 1,
+                        code: 'SK101',
+                        origin: 'São Paulo (GRU)',
+                        destination: 'Rio de Janeiro (GIG)',
+                        date: '2025-04-15',
+                        time: '08:00',
+                        capacity: 150,
+                        price: 299.99,
+                        bookings: []
+                    },
+                    {
+                        id: 2,
+                        code: 'SK202',
+                        origin: 'Rio de Janeiro (GIG)',
+                        destination: 'São Paulo (GRU)',
+                        date: '2025-04-15',
+                        time: '18:00',
+                        capacity: 150,
+                        price: 299.99,
+                        bookings: []
+                    }
+                ];
+                localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(defaultFlights));
+            }
+
+            if (!localStorage.getItem(STORAGE_KEYS.BOOKINGS)) {
+                localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify([]));
+            }
+
+            if (!localStorage.getItem(STORAGE_KEYS.OVERBOOKING_POLICY)) {
+                const defaultPolicy = {
+                    maxOverbookingPercentage: 10,
+                    compensationOptions: [
+                        'Voucher de 150% do valor',
+                        'Upgrade de classe',
+                        'Reacomodação no próximo voo',
+                        'Reembolso integral'
+                    ]
+                };
+                localStorage.setItem(STORAGE_KEYS.OVERBOOKING_POLICY, JSON.stringify(defaultPolicy));
+            }
+        }
+
+        // Authentication Functions
+        let currentUser = null;
+
+        function openAuthModal() {
+            document.getElementById('authModal').classList.add('active');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+        }
+
+        function switchAuthTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            document.querySelector(`.auth-tab[onclick="switchAuthTab('${tab}')"]`).classList.add('active');
+            document.getElementById(`${tab}Form`).classList.add('active');
+        }
+
+        // Role selection
+        document.querySelectorAll('.role-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.role-option').forEach(o => o.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById('registerRole').value = this.dataset.role;
+            });
+        });
+
+        // Login form submission
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                updateUIForUser();
+                closeAuthModal();
+                showAlert('Login realizado com sucesso!', 'success');
+            } else {
+                showAlert('Email ou senha incorretos!', 'danger');
+            }
+        });
+
+        // Register form submission
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const role = document.getElementById('registerRole').value;
+            
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+            
+            // Check if user already exists
+            if (users.find(u => u.email === email)) {
+                showAlert('Este email já está cadastrado!', 'danger');
+                return;
+            }
+            
+            // Create new user
+            const newUser = {
+                id: users.length > 0 ? Math.max(...users.map(u => u.id)) + 1 : 1,
+                name,
+                email,
+                password,
+                role
+            };
+            
+            users.push(newUser);
+            localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+            
+            showAlert('Cadastro realizado com sucesso! Faça login para continuar.', 'success');
+            switchAuthTab('login');
+            document.getElementById('registerForm').reset();
+        });
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateUIForUser();
+            showSection('hero');
+            showAlert('Logout realizado com sucesso!', 'success');
+        }
+
+        function updateUIForUser() {
+            const headerButtons = document.getElementById('headerButtons');
+            const userMenu = document.getElementById('userMenu');
+            const userName = document.getElementById('userName');
+            
+            if (currentUser) {
+                headerButtons.style.display = 'none';
+                userMenu.style.display = 'flex';
+                userName.textContent = currentUser.name;
+                
+                // Show appropriate dashboard
+                if (currentUser.role === 'admin') {
+                    showSection('adminDashboard');
+                    loadAdminDashboard();
+                } else if (currentUser.role === 'agent') {
+                    showSection('agentDashboard');
+                    loadAgentDashboard();
+                } else {
+                    showSection('passengerDashboard');
+                    loadPassengerDashboard();
+                }
+            } else {
+                headerButtons.style.display = 'flex';
+                userMenu.style.display = 'none';
+                showSection('hero');
+            }
+        }
+
+        // Section Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            document.getElementById(sectionId).style.display = 'block';
+            
+            if (sectionId === 'hero' || sectionId === 'flights' || sectionId === 'about') {
+                document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Modal Functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Alert System
+        function showAlert(message, type) {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            
+            document.body.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+
+        // Flight Management
+        function searchFlights() {
+            const origin = document.getElementById('flightOrigin').value;
+            const destination = document.getElementById('flightDestination').value;
+            const date = document.getElementById('flightDate').value;
+            const passengers = document.getElementById('flightPassengers').value;
+            
+            if (!currentUser || currentUser.role !== 'passenger') {
+                showAlert('Faça login como passageiro para buscar voos!', 'warning');
+                openAuthModal();
+                return;
+            }
+            
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            let filteredFlights = flights;
+            
+            if (origin) {
+                filteredFlights = filteredFlights.filter(f => 
+                    f.origin.toLowerCase().includes(origin.toLowerCase()));
+            }
+            
+            if (destination) {
+                filteredFlights = filteredFlights.filter(f => 
+                    f.destination.toLowerCase().includes(destination.toLowerCase()));
+            }
+            
+            if (date) {
+                filteredFlights = filteredFlights.filter(f => f.date === date);
+            }
+            
+            // Display results
+            const resultsHTML = filteredFlights.map(flight => `
+                <div class="feature-card">
+                    <h3>Voo ${flight.code}</h3>
+                    <p><strong>Origem:</strong> ${flight.origin}</p>
+                    <p><strong>Destino:</strong> ${flight.destination}</p>
+                    <p><strong>Data:</strong> ${formatDate(flight.date)}</p>
+                    <p><strong>Horário:</strong> ${flight.time}</p>
+                    <p><strong>Preço:</strong> R$ ${flight.price.toFixed(2)}</p>
+                    <p><strong>Assentos disponíveis:</strong> ${flight.capacity - flight.bookings.length}</p>
+                    <button class="btn btn-accent" onclick="bookFlight(${flight.id}, ${passengers})">
+                        Reservar ${passengers} Passageiro(s)
+                    </button>
+                </div>
+            `).join('');
+            
+            document.getElementById('flights').innerHTML += `
+                <div class="container" style="margin-top: 2rem;">
+                    <h2 style="text-align: center; margin-bottom: 2rem;">Resultados da Busca</h2>
+                    <div class="features-grid">
+                        ${resultsHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        function bookFlight(flightId, passengers) {
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const flight = flights.find(f => f.id === flightId);
+            
+            if (!flight) {
+                showAlert('Voo não encontrado!', 'danger');
+                return;
+            }
+            
+            const availableSeats = flight.capacity - flight.bookings.length;
+            
+            if (passengers > availableSeats) {
+                showAlert(`Apenas ${availableSeats} assentos disponíveis!`, 'warning');
+                return;
+            }
+            
+            // Create booking
+            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+            const newBooking = {
+                id: bookings.length > 0 ? Math.max(...bookings.map(b => b.id)) + 1 : 1,
+                flightId,
+                userId: currentUser.id,
+                passengers,
+                status: 'confirmed',
+                bookingDate: new Date().toISOString().split('T')[0]
+            };
+            
+            // Add to flight bookings
+            flight.bookings.push(newBooking.id);
+            
+            // Save data
+            bookings.push(newBooking);
+            localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+            localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
+            
+            showAlert(`Reserva confirmada para ${passengers} passageiro(s)!`, 'success');
+            loadPassengerDashboard();
+        }
+
+        // Admin Dashboard Functions
+        function loadAdminDashboard() {
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+            
+            // Update stats
+            document.getElementById('totalFlights').textContent = flights.length;
+            document.getElementById('totalBookings').textContent = bookings.length;
+            
+            // Calculate overbooking cases
+            const overbookingCases = flights.filter(flight => 
+                flight.bookings.length > flight.capacity
+            ).length;
+            document.getElementById('overbookingCases').textContent = overbookingCases;
+            
+            // Calculate occupancy rate
+            const totalCapacity = flights.reduce((sum, flight) => sum + flight.capacity, 0);
+            const totalBookings = flights.reduce((sum, flight) => sum + flight.bookings.length, 0);
+            const occupancyRate = totalCapacity > 0 ? Math.round((totalBookings / totalCapacity) * 100) : 0;
+            document.getElementById('occupancyRate').textContent = `${occupancyRate}%`;
+            
+            // Load flights table
+            const flightsTableBody = document.querySelector('#flightsTable tbody');
+            flightsTableBody.innerHTML = flights.map(flight => `
+                <tr>
+                    <td>${flight.code}</td>
+                    <td>${flight.origin}</td>
+                    <td>${flight.destination}</td>
+                    <td>${formatDate(flight.date)}</td>
+                    <td>
+                        <button class="btn btn-ghost" onclick="editFlight(${flight.id})">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteFlight(${flight.id})">Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Load users table
+            const usersTableBody = document.querySelector('#usersTable tbody');
+            usersTableBody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>
+                        ${user.id !== currentUser.id ? 
+                            `<button class="btn btn-danger" onclick="deleteUser(${user.id})">Excluir</button>` : 
+                            '<span>Usuário atual</span>'
+                        }
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Load overbooking policy
+            const policy = JSON.parse(localStorage.getItem(STORAGE_KEYS.OVERBOOKING_POLICY) || '{}');
+            document.getElementById('overbookingPercentage').value = policy.maxOverbookingPercentage || 10;
+            document.getElementById('compensationOptions').value = 
+                (policy.compensationOptions || []).join(', ');
+        }
+
+        function saveOverbookingPolicy() {
+            const percentage = document.getElementById('overbookingPercentage').value;
+            const options = document.getElementById('compensationOptions').value.split(',').map(o => o.trim());
+            
+            const policy = {
+                maxOverbookingPercentage: parseInt(percentage),
+                compensationOptions: options
+            };
+            
+            localStorage.setItem(STORAGE_KEYS.OVERBOOKING_POLICY, JSON.stringify(policy));
+            showAlert('Política de overbooking salva com sucesso!', 'success');
+        }
+
+        // Flight form submission
+        document.getElementById('flightForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const flightId = document.getElementById('flightId').value;
+            const code = document.getElementById('flightCode').value;
+            const origin = document.getElementById('flightOriginModal').value;
+            const destination = document.getElementById('flightDestinationModal').value;
+            const date = document.getElementById('flightDateModal').value;
+            const time = document.getElementById('flightTime').value;
+            const capacity = document.getElementById('flightCapacity').value;
+            const price = document.getElementById('flightPrice').value;
+            
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            
+            if (flightId) {
+                // Edit existing flight
+                const index = flights.findIndex(f => f.id === parseInt(flightId));
+                if (index !== -1) {
+                    flights[index] = {
+                        ...flights[index],
+                        code,
+                        origin,
+                        destination,
+                        date,
+                        time,
+                        capacity: parseInt(capacity),
+                        price: parseFloat(price)
+                    };
+                }
+            } else {
+                // Add new flight
+                const newFlight = {
+                    id: flights.length > 0 ? Math.max(...flights.map(f => f.id)) + 1 : 1,
+                    code,
+                    origin,
+                    destination,
+                    date,
+                    time,
+                    capacity: parseInt(capacity),
+                    price: parseFloat(price),
+                    bookings: []
+                };
+                flights.push(newFlight);
+            }
+            
+            localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
+            closeModal('flightModal');
+            loadAdminDashboard();
+            showAlert('Voo salvo com sucesso!', 'success');
+        });
+
+        function editFlight(flightId) {
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const flight = flights.find(f => f.id === flightId);
+            
+            if (flight) {
+                document.getElementById('flightModalTitle').textContent = 'Editar Voo';
+                document.getElementById('flightId').value = flight.id;
+                document.getElementById('flightCode').value = flight.code;
+                document.getElementById('flightOriginModal').value = flight.origin;
+                document.getElementById('flightDestinationModal').value = flight.destination;
+                document.getElementById('flightDateModal').value = flight.date;
+                document.getElementById('flightTime').value = flight.time;
+                document.getElementById('flightCapacity').value = flight.capacity;
+                document.getElementById('flightPrice').value = flight.price;
+                
+                showModal('flightModal');
+            }
+        }
+
+        function deleteFlight(flightId) {
+            if (confirm('Tem certeza que deseja excluir este voo?')) {
+                const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+                const filteredFlights = flights.filter(f => f.id !== flightId);
+                localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(filteredFlights));
+                loadAdminDashboard();
+                showAlert('Voo excluído com sucesso!', 'success');
+            }
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Tem certeza que deseja excluir este usuário?')) {
+                const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+                const filteredUsers = users.filter(u => u.id !== userId);
+                localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(filteredUsers));
+                loadAdminDashboard();
+                showAlert('Usuário excluído com sucesso!', 'success');
+            }
+        }
+
+        // Agent Dashboard Functions
+        function loadAgentDashboard() {
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+            const policy = JSON.parse(localStorage.getItem(STORAGE_KEYS.OVERBOOKING_POLICY) || '{}');
+            
+            // Check for overbooking
+            const overbookingFlights = flights.filter(flight => 
+                flight.bookings.length > flight.capacity
+            );
+            
+            if (overbookingFlights.length > 0) {
+                document.getElementById('overbookingAlert').style.display = 'block';
+                
+                // Display overbooking flights
+                document.getElementById('overbookingFlightsList').innerHTML = overbookingFlights.map(flight => `
+                    <div class="alert alert-warning">
+                        <h4>Voo ${flight.code}</h4>
+                        <p><strong>Rota:</strong> ${flight.origin} → ${flight.destination}</p>
+                        <p><strong>Data:</strong> ${formatDate(flight.date)}</p>
+                        <p><strong>Excesso:</strong> ${flight.bookings.length - flight.capacity} passageiros</p>
+                        <button class="btn btn-accent" onclick="resolveOverbooking(${flight.id})">Resolver</button>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('overbookingAlert').style.display = 'none';
+                document.getElementById('overbookingFlightsList').innerHTML = '<p>Nenhum voo com overbooking no momento.</p>';
+            }
+            
+            // Load compensation options
+            document.getElementById('compensationOptionsList').innerHTML = 
+                (policy.compensationOptions || []).map(option => `
+                    <div class="feature-card">
+                        <h4>${option}</h4>
+                        <button class="btn btn-accent" onclick="offerCompensation('${option}')">Oferecer</button>
+                    </div>
+                `).join('');
+        }
+
+        function resolveOverbooking(flightId) {
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const flight = flights.find(f => f.id === flightId);
+            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+            
+            if (!flight) return;
+            
+            // Get flight bookings with user info
+            const flightBookings = bookings.filter(b => b.flightId === flightId)
+                .map(booking => {
+                    const user = users.find(u => u.id === booking.userId);
+                    return {
+                        ...booking,
+                        userName: user ? user.name : 'Usuário Desconhecido',
+                        userEmail: user ? user.email : 'Email Desconhecido'
+                    };
+                });
+            
+            // Sort by booking date (FIFO - first in, first out)
+            flightBookings.sort((a, b) => new Date(a.bookingDate) - new Date(b.bookingDate));
+            
+            // Display passenger priority list
+            document.getElementById('passengerPriorityList').innerHTML = flightBookings.map((booking, index) => {
+                const priorityClass = index < flight.capacity ? 'priority-low' : 'priority-high';
+                return `
+                    <li class="priority-item ${priorityClass}">
+                        <div>
+                            <strong>${booking.userName}</strong>
+                            <p>${booking.userEmail} - ${booking.passengers} passageiro(s)</p>
+                        </div>
+                        <div>
+                            ${index >= flight.capacity ? 
+                                `<button class="btn btn-danger" onclick="removePassenger(${booking.id})">Remover</button>` : 
+                                '<span class="stat-label">Confirmado</span>'
+                            }
+                        </div>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        function removePassenger(bookingId) {
+            if (confirm('Tem certeza que deseja remover este passageiro?')) {
+                const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+                const booking = bookings.find(b => b.id === bookingId);
+                
+                if (booking) {
+                    // Remove from flight bookings
+                    const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+                    const flight = flights.find(f => f.id === booking.flightId);
+                    
+                    if (flight) {
+                        flight.bookings = flight.bookings.filter(b => b !== bookingId);
+                        localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
+                    }
+                    
+                    // Update booking status
+                    booking.status = 'cancelled';
+                    localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+                    
+                    showAlert('Passageiro removido com sucesso!', 'success');
+                    loadAgentDashboard();
+                }
+            }
+        }
+
+        function offerCompensation(option) {
+            showAlert(`Compensação "${option}" oferecida ao passageiro!`, 'success');
+        }
+
+        // Passenger Dashboard Functions
+        function loadPassengerDashboard() {
+            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const userBookings = bookings.filter(b => b.userId === currentUser.id && b.status === 'confirmed');
+            
+            // Check for overbooking in passenger's flights
+            const hasOverbooking = userBookings.some(booking => {
+                const flight = flights.find(f => f.id === booking.flightId);
+                return flight && flight.bookings.length > flight.capacity;
+            });
+            
+            if (hasOverbooking) {
+                document.getElementById('passengerOverbookingAlert').style.display = 'block';
+            } else {
+                document.getElementById('passengerOverbookingAlert').style.display = 'none';
+            }
+            
+            // Display passenger bookings
+            document.getElementById('passengerBookingsList').innerHTML = userBookings.map(booking => {
+                const flight = flights.find(f => f.id === booking.flightId);
+                if (!flight) return '';
+                
+                const isOverbooked = flight.bookings.length > flight.capacity;
+                
+                return `
+                    <div class="feature-card ${isOverbooked ? 'alert-warning' : ''}">
+                        <h3>Voo ${flight.code}</h3>
+                        <p><strong>Rota:</strong> ${flight.origin} → ${flight.destination}</p>
+                        <p><strong>Data:</strong> ${formatDate(flight.date)}</p>
+                        <p><strong>Horário:</strong> ${flight.time}</p>
+                        <p><strong>Passageiros:</strong> ${booking.passengers}</p>
+                        <p><strong>Status:</strong> ${booking.status === 'confirmed' ? 'Confirmado' : 'Cancelado'}</p>
+                        ${isOverbooked ? `
+                            <div class="alert alert-warning">
+                                <p><strong>Este voo está com overbooking.</strong></p>
+                                <p>Você pode receber uma proposta de compensação em breve.</p>
+                                <button class="btn btn-accent" onclick="viewCompensationOptions(${flight.id})">Ver Opções</button>
+                            </div>
+                        ` : ''}
+                        <button class="btn btn-danger" onclick="cancelBooking(${booking.id})">Cancelar Reserva</button>
+                    </div>
+                `;
+            }).join('');
+            
+            if (userBookings.length === 0) {
+                document.getElementById('passengerBookingsList').innerHTML = `
+                    <div class="feature-card">
+                        <h3>Nenhuma reserva encontrada</h3>
+                        <p>Você ainda não fez nenhuma reserva. Explore nossos voos disponíveis!</p>
+                        <button class="btn btn-accent" onclick="showSection('flights')">Buscar Voos</button>
+                    </div>
+                `;
+            }
+        }
+
+        function viewCompensationOptions(flightId) {
+            const policy = JSON.parse(localStorage.getItem(STORAGE_KEYS.OVERBOOKING_POLICY) || '{}');
+            const options = policy.compensationOptions || [];
+            
+            const optionsHTML = options.map(option => `
+                <div class="feature-card">
+                    <h4>${option}</h4>
+                    <button class="btn btn-accent" onclick="acceptCompensation('${option}', ${flightId})">Aceitar</button>
+                    <button class="btn btn-ghost" onclick="rejectCompensation('${option}', ${flightId})">Recusar</button>
+                </div>
+            `).join('');
+            
+            document.getElementById('passengerBookingsList').innerHTML += `
+                <div class="feature-card">
+                    <h3>Opções de Compensação</h3>
+                    <div class="features-grid">
+                        ${optionsHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        function acceptCompensation(option, flightId) {
+            showAlert(`Você aceitou a compensação: ${option}`, 'success');
+            // In a real system, this would update the booking status and process the compensation
+        }
+
+        function rejectCompensation(option, flightId) {
+            showAlert(`Você recusou a compensação: ${option}`, 'warning');
+            // In a real system, this would be recorded and alternative solutions would be offered
+        }
+
+        function cancelBooking(bookingId) {
+            if (confirm('Tem certeza que deseja cancelar esta reserva?')) {
+                const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+                const booking = bookings.find(b => b.id === bookingId);
+                
+                if (booking) {
+                    // Remove from flight bookings
+                    const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+                    const flight = flights.find(f => f.id === booking.flightId);
+                    
+                    if (flight) {
+                        flight.bookings = flight.bookings.filter(b => b !== bookingId);
+                        localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
+                    }
+                    
+                    // Update booking status
+                    booking.status = 'cancelled';
+                    localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+                    
+                    showAlert('Reserva cancelada com sucesso!', 'success');
+                    loadPassengerDashboard();
+                }
+            }
+        }
+
+        // Utility Functions
+        function formatDate(dateString) {
+            const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+            return new Date(dateString).toLocaleDateString('pt-BR', options);
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeData();
+            
+            // Check if user is already logged in
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateUIForUser();
+            }
+            
+            // Set minimum date for flight search to today
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('flightDate').min = today;
+            document.getElementById('flightDateModal').min = today;
+        });
+    </script>
+</body>
+</html>
