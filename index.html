@@ -169,6 +169,16 @@
             width: 100%;
         }
 
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+
         /* Hero Section */
         .hero {
             height: 600px;
@@ -472,6 +482,103 @@
             border-top: 1px solid var(--border);
         }
 
+        /* Dashboard Styles */
+        .dashboard {
+            padding: 6rem 0 2rem 0;
+            min-height: calc(100vh - 72px);
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        .dashboard-card {
+            padding: 1.5rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .dashboard-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--foreground);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+            background: var(--muted);
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .data-table th {
+            font-weight: 600;
+            color: var(--foreground);
+            background: var(--muted);
+        }
+
+        .data-table tr:hover {
+            background: var(--muted);
+        }
+
         /* Modal Styles */
         .modal {
             display: none;
@@ -556,6 +663,42 @@
             background: hsl(0, 85%, 45%, 0.1);
             border: 1px solid hsl(0, 85%, 45%);
             color: hsl(0, 85%, 45%);
+        }
+
+        /* Overbooking Styles */
+        .overbooking-alert {
+            background: var(--accent);
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .priority-list {
+            list-style: none;
+        }
+
+        .priority-item {
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .priority-high {
+            border-left: 4px solid var(--danger);
+        }
+
+        .priority-medium {
+            border-left: 4px solid var(--accent);
+        }
+
+        .priority-low {
+            border-left: 4px solid var(--success);
         }
 
         /* Login/Register Styles */
@@ -1072,6 +1215,134 @@
                 </div>
             </div>
         </section>
+
+        <!-- Dashboard Sections (Hidden by default) -->
+        <section id="adminDashboard" class="dashboard" style="display: none;">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Painel Administrativo</h2>
+                    <button class="btn btn-accent" onclick="showModal('flightModal')">Adicionar Voo</button>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalFlights">0</div>
+                        <div class="stat-label">Voos Cadastrados</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalBookings">0</div>
+                        <div class="stat-label">Reservas Ativas</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="overbookingCases">0</div>
+                        <div class="stat-label">Casos de Overbooking</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="occupancyRate">0%</div>
+                        <div class="stat-label">Taxa de Ocupação</div>
+                    </div>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Gerenciar Voos</h3>
+                        <div class="table-container">
+                            <table class="data-table" id="flightsTable">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Origem</th>
+                                        <th>Destino</th>
+                                        <th>Data</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Políticas de Overbooking</h3>
+                        <div class="form-group">
+                            <label for="overbookingPercentage">Percentual Máximo de Overbooking</label>
+                            <input type="number" id="overbookingPercentage" class="input" min="0" max="20" value="10">
+                        </div>
+                        <div class="form-group">
+                            <label for="compensationOptions">Opções de Compensação</label>
+                            <textarea id="compensationOptions" class="input" rows="4">Voucher de 150% do valor, Upgrade de classe, Reacomodação no próximo voo, Reembolso integral</textarea>
+                        </div>
+                        <button class="btn btn-accent btn-full" onclick="saveOverbookingPolicy()">Salvar Política</button>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Gerenciar Usuários</h3>
+                        <div class="table-container">
+                            <table class="data-table" id="usersTable">
+                                <thead>
+                                    <tr>
+                                        <th>Nome</th>
+                                        <th>Email</th>
+                                        <th>Tipo</th>
+                                        <th>Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="agentDashboard" class="dashboard" style="display: none;">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Painel do Agente</h2>
+                </div>
+                
+                <div id="overbookingAlert" class="overbooking-alert" style="display: none;">
+                    <h3>Alerta de Overbooking!</h3>
+                    <p>Um ou mais voos estão com excesso de passageiros. Verifique a lista abaixo.</p>
+                </div>
+                
+                <div class="dashboard-grid">
+                    <div class="dashboard-card">
+                        <h3>Voos com Overbooking</h3>
+                        <div id="overbookingFlightsList"></div>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Passageiros por Prioridade</h3>
+                        <ul class="priority-list" id="passengerPriorityList"></ul>
+                    </div>
+                    
+                    <div class="dashboard-card">
+                        <h3>Opções de Compensação</h3>
+                        <div id="compensationOptionsList"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="passengerDashboard" class="dashboard" style="display: none;">
+            <div class="container">
+                <div class="dashboard-header">
+                    <h2>Minhas Reservas</h2>
+                    <button class="btn btn-accent" onclick="showSection('search')">Buscar Voos</button>
+                </div>
+                
+                <div id="passengerOverbookingAlert" class="alert alert-warning" style="display: none;">
+                    <h3>Seu voo está com overbooking</h3>
+                    <p>Verifique as opções de compensação disponíveis abaixo.</p>
+                </div>
+                
+                <div class="dashboard-card">
+                    <h3>Minhas Reservas</h3>
+                    <div id="passengerBookingsList"></div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -1112,6 +1383,48 @@
             </div>
         </div>
     </footer>
+
+    <!-- Flight Modal -->
+    <div id="flightModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="flightModalTitle">Adicionar Voo</h2>
+                <button class="close-modal" onclick="closeModal('flightModal')">&times;</button>
+            </div>
+            <form id="flightForm">
+                <input type="hidden" id="flightId">
+                <div class="form-group">
+                    <label for="flightCode">Código do Voo</label>
+                    <input type="text" id="flightCode" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightOrigin">Origem</label>
+                    <input type="text" id="flightOriginModal" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightDestination">Destino</label>
+                    <input type="text" id="flightDestinationModal" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightDateModal">Data</label>
+                    <input type="date" id="flightDateModal" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightTime">Horário</label>
+                    <input type="time" id="flightTime" class="input" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightCapacity">Capacidade</label>
+                    <input type="number" id="flightCapacity" class="input" min="1" required>
+                </div>
+                <div class="form-group">
+                    <label for="flightPrice">Preço (R$)</label>
+                    <input type="number" id="flightPrice" class="input" min="0" step="0.01" required>
+                </div>
+                <button type="submit" class="btn btn-accent btn-full">Salvar Voo</button>
+            </form>
+        </div>
+    </div>
 
     <!-- Painel Lateral de Troca de Perfil -->
     <div id="profilePanel" class="profile-panel">
@@ -1447,6 +1760,18 @@
                 headerButtons.style.display = 'none';
                 userMenu.style.display = 'flex';
                 userName.textContent = currentUser.name;
+                
+                // Show appropriate dashboard
+                if (currentUser.role === 'admin') {
+                    showSection('adminDashboard');
+                    loadAdminDashboard();
+                } else if (currentUser.role === 'agent') {
+                    showSection('agentDashboard');
+                    loadAgentDashboard();
+                } else {
+                    showSection('passengerDashboard');
+                    loadPassengerDashboard();
+                }
             } else {
                 headerButtons.style.display = 'flex';
                 userMenu.style.display = 'none';
@@ -1468,6 +1793,15 @@
             if (sectionId === 'hero' || sectionId === 'search' || sectionId === 'about') {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
+        }
+
+        // Modal Functions
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
         }
 
         // Alert System
@@ -1586,6 +1920,404 @@
             localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
             
             showAlert(`Reserva confirmada para ${passengers} passageiro(s)!`, 'success');
+            loadPassengerDashboard();
+            showSection('passengerDashboard');
+        }
+
+        // Admin Dashboard Functions
+        function loadAdminDashboard() {
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+            
+            // Update stats
+            document.getElementById('totalFlights').textContent = flights.length;
+            document.getElementById('totalBookings').textContent = bookings.filter(b => b.status === 'confirmed').length;
+            
+            // Calculate overbooking cases
+            const overbookingCases = flights.filter(flight => 
+                flight.bookings.length > flight.capacity
+            ).length;
+            document.getElementById('overbookingCases').textContent = overbookingCases;
+            
+            // Calculate occupancy rate
+            const totalCapacity = flights.reduce((sum, flight) => sum + flight.capacity, 0);
+            const totalBookings = flights.reduce((sum, flight) => sum + flight.bookings.length, 0);
+            const occupancyRate = totalCapacity > 0 ? Math.round((totalBookings / totalCapacity) * 100) : 0;
+            document.getElementById('occupancyRate').textContent = `${occupancyRate}%`;
+            
+            // Load flights table
+            const flightsTableBody = document.querySelector('#flightsTable tbody');
+            flightsTableBody.innerHTML = flights.map(flight => `
+                <tr>
+                    <td>${flight.code}</td>
+                    <td>${flight.origin}</td>
+                    <td>${flight.destination}</td>
+                    <td>${formatDate(flight.date)}</td>
+                    <td>
+                        <button class="btn btn-ghost" onclick="editFlight(${flight.id})">Editar</button>
+                        <button class="btn btn-danger" onclick="deleteFlight(${flight.id})">Excluir</button>
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Load users table
+            const usersTableBody = document.querySelector('#usersTable tbody');
+            usersTableBody.innerHTML = users.map(user => `
+                <tr>
+                    <td>${user.name}</td>
+                    <td>${user.email}</td>
+                    <td>${user.role}</td>
+                    <td>
+                        ${user.id !== currentUser.id ? 
+                            `<button class="btn btn-danger" onclick="deleteUser(${user.id})">Excluir</button>` : 
+                            '<span>Usuário atual</span>'
+                        }
+                    </td>
+                </tr>
+            `).join('');
+            
+            // Load overbooking policy
+            const policy = JSON.parse(localStorage.getItem(STORAGE_KEYS.OVERBOOKING_POLICY) || '{}');
+            document.getElementById('overbookingPercentage').value = policy.maxOverbookingPercentage || 10;
+            document.getElementById('compensationOptions').value = 
+                (policy.compensationOptions || []).join(', ');
+        }
+
+        function saveOverbookingPolicy() {
+            const percentage = document.getElementById('overbookingPercentage').value;
+            const options = document.getElementById('compensationOptions').value.split(',').map(o => o.trim());
+            
+            const policy = {
+                maxOverbookingPercentage: parseInt(percentage),
+                compensationOptions: options
+            };
+            
+            localStorage.setItem(STORAGE_KEYS.OVERBOOKING_POLICY, JSON.stringify(policy));
+            showAlert('Política de overbooking salva com sucesso!', 'success');
+        }
+
+        // Flight form submission
+        document.getElementById('flightForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const flightId = document.getElementById('flightId').value;
+            const code = document.getElementById('flightCode').value;
+            const origin = document.getElementById('flightOriginModal').value;
+            const destination = document.getElementById('flightDestinationModal').value;
+            const date = document.getElementById('flightDateModal').value;
+            const time = document.getElementById('flightTime').value;
+            const capacity = document.getElementById('flightCapacity').value;
+            const price = document.getElementById('flightPrice').value;
+            
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            
+            if (flightId) {
+                // Edit existing flight
+                const index = flights.findIndex(f => f.id === parseInt(flightId));
+                if (index !== -1) {
+                    flights[index] = {
+                        ...flights[index],
+                        code,
+                        origin,
+                        destination,
+                        date,
+                        time,
+                        capacity: parseInt(capacity),
+                        price: parseFloat(price)
+                    };
+                }
+            } else {
+                // Add new flight
+                const newFlight = {
+                    id: flights.length > 0 ? Math.max(...flights.map(f => f.id)) + 1 : 1,
+                    code,
+                    origin,
+                    destination,
+                    date,
+                    time,
+                    capacity: parseInt(capacity),
+                    price: parseFloat(price),
+                    bookings: []
+                };
+                flights.push(newFlight);
+            }
+            
+            localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
+            closeModal('flightModal');
+            loadAdminDashboard();
+            showAlert('Voo salvo com sucesso!', 'success');
+        });
+
+        function editFlight(flightId) {
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const flight = flights.find(f => f.id === flightId);
+            
+            if (flight) {
+                document.getElementById('flightModalTitle').textContent = 'Editar Voo';
+                document.getElementById('flightId').value = flight.id;
+                document.getElementById('flightCode').value = flight.code;
+                document.getElementById('flightOriginModal').value = flight.origin;
+                document.getElementById('flightDestinationModal').value = flight.destination;
+                document.getElementById('flightDateModal').value = flight.date;
+                document.getElementById('flightTime').value = flight.time;
+                document.getElementById('flightCapacity').value = flight.capacity;
+                document.getElementById('flightPrice').value = flight.price;
+                
+                showModal('flightModal');
+            }
+        }
+
+        function deleteFlight(flightId) {
+            if (confirm('Tem certeza que deseja excluir este voo?')) {
+                const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+                const filteredFlights = flights.filter(f => f.id !== flightId);
+                localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(filteredFlights));
+                loadAdminDashboard();
+                showAlert('Voo excluído com sucesso!', 'success');
+            }
+        }
+
+        function deleteUser(userId) {
+            if (confirm('Tem certeza que deseja excluir este usuário?')) {
+                const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+                const filteredUsers = users.filter(u => u.id !== userId);
+                localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(filteredUsers));
+                loadAdminDashboard();
+                showAlert('Usuário excluído com sucesso!', 'success');
+            }
+        }
+
+        // Agent Dashboard Functions
+        function loadAgentDashboard() {
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+            const policy = JSON.parse(localStorage.getItem(STORAGE_KEYS.OVERBOOKING_POLICY) || '{}');
+            
+            // Check for overbooking
+            const overbookingFlights = flights.filter(flight => 
+                flight.bookings.length > flight.capacity
+            );
+            
+            if (overbookingFlights.length > 0) {
+                document.getElementById('overbookingAlert').style.display = 'block';
+                
+                // Display overbooking flights
+                document.getElementById('overbookingFlightsList').innerHTML = overbookingFlights.map(flight => `
+                    <div class="alert alert-warning">
+                        <h4>Voo ${flight.code}</h4>
+                        <p><strong>Rota:</strong> ${flight.origin} → ${flight.destination}</p>
+                        <p><strong>Data:</strong> ${formatDate(flight.date)}</p>
+                        <p><strong>Excesso:</strong> ${flight.bookings.length - flight.capacity} passageiros</p>
+                        <button class="btn btn-accent" onclick="resolveOverbooking(${flight.id})">Resolver</button>
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('overbookingAlert').style.display = 'none';
+                document.getElementById('overbookingFlightsList').innerHTML = '<p>Nenhum voo com overbooking no momento.</p>';
+            }
+            
+            // Load compensation options
+            document.getElementById('compensationOptionsList').innerHTML = 
+                (policy.compensationOptions || []).map(option => `
+                    <div class="feature-card">
+                        <h4>${option}</h4>
+                        <button class="btn btn-accent" onclick="offerCompensation('${option}')">Oferecer</button>
+                    </div>
+                `).join('');
+        }
+
+        function resolveOverbooking(flightId) {
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const flight = flights.find(f => f.id === flightId);
+            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+            
+            if (!flight) return;
+            
+            // Get flight bookings with user info
+            const flightBookings = bookings.filter(b => b.flightId === flightId && b.status === 'confirmed')
+                .map(booking => {
+                    const user = users.find(u => u.id === booking.userId);
+                    return {
+                        ...booking,
+                        userName: user ? user.name : 'Usuário Desconhecido',
+                        userEmail: user ? user.email : 'Email Desconhecido'
+                    };
+                });
+            
+            // Sort by booking date (FIFO - first in, first out)
+            flightBookings.sort((a, b) => new Date(a.bookingDate) - new Date(b.bookingDate));
+            
+            // Display passenger priority list
+            document.getElementById('passengerPriorityList').innerHTML = flightBookings.map((booking, index) => {
+                const priorityClass = index < flight.capacity ? 'priority-low' : 'priority-high';
+                return `
+                    <li class="priority-item ${priorityClass}">
+                        <div>
+                            <strong>${booking.userName}</strong>
+                            <p>${booking.userEmail} - ${booking.passengers} passageiro(s)</p>
+                            <small>Reserva: ${formatDate(booking.bookingDate)}</small>
+                        </div>
+                        <div>
+                            ${index >= flight.capacity ? 
+                                `<button class="btn btn-danger" onclick="removePassenger(${booking.id})">Remover</button>` : 
+                                '<span class="stat-label">Confirmado</span>'
+                            }
+                        </div>
+                    </li>
+                `;
+            }).join('');
+        }
+
+        function removePassenger(bookingId) {
+            if (confirm('Tem certeza que deseja remover este passageiro?')) {
+                const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+                const bookingIndex = bookings.findIndex(b => b.id === bookingId);
+                
+                if (bookingIndex !== -1) {
+                    // Remove from flight bookings
+                    const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+                    const flight = flights.find(f => f.bookings.includes(bookingId));
+                    
+                    if (flight) {
+                        flight.bookings = flight.bookings.filter(b => b !== bookingId);
+                        localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
+                    }
+                    
+                    // Update booking status
+                    bookings[bookingIndex].status = 'cancelled';
+                    localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+                    
+                    showAlert('Passageiro removido com sucesso!', 'success');
+                    loadAgentDashboard();
+                }
+            }
+        }
+
+        function offerCompensation(option) {
+            showAlert(`Compensação "${option}" oferecida ao passageiro!`, 'success');
+        }
+
+        // Passenger Dashboard Functions
+        function loadPassengerDashboard() {
+            const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+            const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+            const userBookings = bookings.filter(b => b.userId === currentUser.id && b.status === 'confirmed');
+            
+            // Check for overbooking in passenger's flights
+            const hasOverbooking = userBookings.some(booking => {
+                const flight = flights.find(f => f.id === booking.flightId);
+                return flight && flight.bookings.length > flight.capacity;
+            });
+            
+            if (hasOverbooking) {
+                document.getElementById('passengerOverbookingAlert').style.display = 'block';
+            } else {
+                document.getElementById('passengerOverbookingAlert').style.display = 'none';
+            }
+            
+            // Display passenger bookings
+            document.getElementById('passengerBookingsList').innerHTML = userBookings.map(booking => {
+                const flight = flights.find(f => f.id === booking.flightId);
+                if (!flight) return '';
+                
+                const isOverbooked = flight.bookings.length > flight.capacity;
+                
+                return `
+                    <div class="flight-card ${isOverbooked ? 'alert-warning' : ''}">
+                        <div class="flight-header">
+                            <div class="flight-route">
+                                <h3>Voo ${flight.code}</h3>
+                                <p><strong>${flight.origin}</strong> → <strong>${flight.destination}</strong></p>
+                                <p>${formatDate(flight.date)} às ${flight.time}</p>
+                            </div>
+                            <div class="flight-price">
+                                R$ ${flight.price.toFixed(2)}
+                            </div>
+                        </div>
+                        <p><strong>Passageiros:</strong> ${booking.passengers}</p>
+                        <p><strong>Status:</strong> ${booking.status === 'confirmed' ? 'Confirmado' : 'Cancelado'}</p>
+                        <p><strong>Data da Reserva:</strong> ${formatDate(booking.bookingDate)}</p>
+                        ${isOverbooked ? `
+                            <div class="alert alert-warning">
+                                <p><strong>Este voo está com overbooking.</strong></p>
+                                <p>Você pode receber uma proposta de compensação em breve.</p>
+                                <button class="btn btn-accent" onclick="viewCompensationOptions(${flight.id})">Ver Opções</button>
+                            </div>
+                        ` : ''}
+                        <button class="btn btn-danger" onclick="cancelBooking(${booking.id})">Cancelar Reserva</button>
+                    </div>
+                `;
+            }).join('');
+            
+            if (userBookings.length === 0) {
+                document.getElementById('passengerBookingsList').innerHTML = `
+                    <div class="flight-card">
+                        <h3>Nenhuma reserva encontrada</h3>
+                        <p>Você ainda não fez nenhuma reserva. Explore nossos voos disponíveis!</p>
+                        <button class="btn btn-accent" onclick="showSection('search')">Buscar Voos</button>
+                    </div>
+                `;
+            }
+        }
+
+        function viewCompensationOptions(flightId) {
+            const policy = JSON.parse(localStorage.getItem(STORAGE_KEYS.OVERBOOKING_POLICY) || '{}');
+            const options = policy.compensationOptions || [];
+            
+            const optionsHTML = options.map(option => `
+                <div class="feature-card">
+                    <h4>${option}</h4>
+                    <button class="btn btn-accent" onclick="acceptCompensation('${option}', ${flightId})">Aceitar</button>
+                    <button class="btn btn-ghost" onclick="rejectCompensation('${option}', ${flightId})">Recusar</button>
+                </div>
+            `).join('');
+            
+            document.getElementById('passengerBookingsList').innerHTML += `
+                <div class="flight-card">
+                    <h3>Opções de Compensação</h3>
+                    <div class="features-grid">
+                        ${optionsHTML}
+                    </div>
+                </div>
+            `;
+        }
+
+        function acceptCompensation(option, flightId) {
+            showAlert(`Você aceitou a compensação: ${option}`, 'success');
+            // In a real system, this would update the booking status and process the compensation
+        }
+
+        function rejectCompensation(option, flightId) {
+            showAlert(`Você recusou a compensação: ${option}`, 'warning');
+            // In a real system, this would be recorded and alternative solutions would be offered
+        }
+
+        function cancelBooking(bookingId) {
+            if (confirm('Tem certeza que deseja cancelar esta reserva?')) {
+                const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
+                const bookingIndex = bookings.findIndex(b => b.id === bookingId);
+                
+                if (bookingIndex !== -1) {
+                    // Remove from flight bookings
+                    const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
+                    const flight = flights.find(f => f.bookings.includes(bookingId));
+                    
+                    if (flight) {
+                        flight.bookings = flight.bookings.filter(b => b !== bookingId);
+                        localStorage.setItem(STORAGE_KEYS.FLIGHTS, JSON.stringify(flights));
+                    }
+                    
+                    // Update booking status
+                    bookings[bookingIndex].status = 'cancelled';
+                    localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
+                    
+                    showAlert('Reserva cancelada com sucesso!', 'success');
+                    loadPassengerDashboard();
+                }
+            }
         }
 
         // Utility Functions
@@ -1677,6 +2409,18 @@
                 
                 // Atualizar o painel de perfil
                 updateProfilePanel();
+                
+                // Show appropriate dashboard
+                if (currentUser.role === 'admin') {
+                    showSection('adminDashboard');
+                    loadAdminDashboard();
+                } else if (currentUser.role === 'agent') {
+                    showSection('agentDashboard');
+                    loadAgentDashboard();
+                } else {
+                    showSection('passengerDashboard');
+                    loadPassengerDashboard();
+                }
             } else {
                 headerButtons.style.display = 'flex';
                 userMenu.style.display = 'none';
@@ -1698,6 +2442,7 @@
             // Set minimum date for flight search to today
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('flightDate').min = today;
+            document.getElementById('flightDateModal').min = today;
         });
     </script>
 </body>
