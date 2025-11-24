@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fundamentos de SI - Sistema de Reserva e Gestão de Voos</title>
+    <title>SkyLink Airlines - Sistema de Reserva e Gestão de Voos</title>
     <meta name="description" content="Reserve voos com segurança e conforto. Sistema completo de gestão de voos e overbooking.">
     <style>
         /* Reset e Base */
@@ -59,7 +59,7 @@
             left: 0;
             right: 0;
             z-index: 50;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(12px);
             border-bottom: 1px solid var(--border);
             padding: 1rem 0;
@@ -75,6 +75,7 @@
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            cursor: pointer;
         }
 
         .logo-icon {
@@ -110,6 +111,7 @@
             color: var(--foreground);
             text-decoration: none;
             transition: color 0.3s;
+            cursor: pointer;
         }
 
         .nav a:hover {
@@ -250,13 +252,13 @@
 
         /* Search Section */
         .search-section {
-            padding: 3rem 0;
+            padding: 8rem 0 3rem 0;
             background: var(--secondary);
         }
 
         .search-card {
             max-width: 900px;
-            margin: 6rem auto 0;
+            margin: 0 auto;
             padding: 2rem;
             background: var(--card);
             border-radius: 1rem;
@@ -507,8 +509,7 @@
 
         /* Dashboard Styles */
         .dashboard {
-            padding: 4rem 0;
-            margin-top: 72px;
+            padding: 6rem 0 2rem 0;
             min-height: calc(100vh - 72px);
         }
 
@@ -796,6 +797,200 @@
             color: var(--primary-foreground);
             border-color: var(--primary);
         }
+
+        /* Flight Results */
+        .flight-results {
+            margin-top: 2rem;
+        }
+
+        .flight-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: all 0.3s;
+        }
+
+        .flight-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-elevation);
+        }
+
+        .flight-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .flight-route {
+            flex: 1;
+        }
+
+        .flight-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Painel Lateral de Troca de Perfil */
+        .profile-panel {
+        position: fixed;
+        top: 0;
+        right: -350px;
+        width: 320px;
+        height: 100vh;
+        background: var(--card);
+        border-left: 1px solid var(--border);
+        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+        transition: right 0.3s ease;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        }
+
+        .profile-panel.active {
+        right: 0;
+        }
+
+        .profile-panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--border);
+        }
+
+        .profile-panel-header h3 {
+        margin: 0;
+        color: var(--foreground);
+        }
+
+        .close-panel {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--muted-foreground);
+        width: 30px;
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.25rem;
+        }
+
+        .close-panel:hover {
+        background: var(--muted);
+        }
+
+        .profile-options {
+        flex: 1;
+        margin-bottom: 1.5rem;
+        }
+
+        .profile-option {
+        display: block;
+        margin-bottom: 0.75rem;
+        cursor: pointer;
+        }
+
+        .profile-option input[type="radio"] {
+        display: none;
+        }
+
+        .profile-content {
+        display: flex;
+        align-items: center;
+        padding: 1rem;
+        border: 2px solid var(--border);
+        border-radius: 0.75rem;
+        transition: all 0.3s;
+        background: var(--background);
+        }
+
+        .profile-option input[type="radio"]:checked + .profile-content {
+        border-color: var(--primary);
+        background: var(--primary);
+        color: var(--primary-foreground);
+        }
+
+        .profile-option input[type="radio"]:checked + .profile-content .profile-icon {
+        background: rgba(255, 255, 255, 0.2);
+        color: var(--primary-foreground);
+        }
+
+        .profile-option input[type="radio"]:checked + .profile-content .profile-info span {
+        color: rgba(255, 255, 255, 0.8);
+        }
+
+        .profile-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--muted);
+        border-radius: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 1rem;
+        color: var(--primary);
+        }
+
+        .profile-info {
+        flex: 1;
+        }
+
+        .profile-info strong {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        }
+
+        .profile-info span {
+        font-size: 0.875rem;
+        color: var(--muted-foreground);
+        }
+
+        /* Botão de toggle do painel */
+        .profile-panel-toggle {
+        position: fixed;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        background: var(--primary);
+        color: var(--primary-foreground);
+        border: none;
+        border-radius: 0.5rem 0 0 0.5rem;
+        padding: 0.75rem;
+        cursor: pointer;
+        z-index: 999;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s;
+        }
+
+        .profile-panel-toggle:hover {
+        background: var(--accent);
+        padding-right: 1rem;
+        }
+
+        /* Overlay quando o painel está aberto */
+        .panel-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        display: none;
+        }
+
+        .panel-overlay.active {
+        display: block;
+        }
     </style>
 </head>
 <body>
@@ -822,6 +1017,13 @@
                     <input type="password" id="loginPassword" class="input" required>
                 </div>
                 <button type="submit" class="btn btn-accent btn-full">Entrar</button>
+                
+                <div style="margin-top: 1rem; padding: 1rem; background: var(--muted); border-radius: 0.5rem;">
+                    <h4 style="margin-bottom: 0.5rem;">Contas de Teste:</h4>
+                    <p><strong>Admin:</strong> admin@skylink.com / admin123</p>
+                    <p><strong>Agente:</strong> agente@skylink.com / agente123</p>
+                    <p><strong>Passageiro:</strong> passageiro@skylink.com / passageiro123</p>
+                </div>
             </form>
             
             <form id="registerForm" class="auth-form">
@@ -855,7 +1057,7 @@
     <header class="header">
         <div class="container">
             <div class="header-content">
-                <div class="logo">
+                <div class="logo" onclick="showSection('hero')">
                     <div class="logo-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/>
@@ -868,9 +1070,9 @@
                 </div>
                 
                 <nav class="nav">
-                    <a href="#flights" onclick="showSection('flights')">Voos</a>
-                    <a href="#destinations" onclick="showSection('destinations')">Destinos</a>
-                    <a href="#about" onclick="showSection('about')">Sobre</a>
+                    <a onclick="showSection('flights')">Voos</a>
+                    <a onclick="showSection('destinations')">Destinos</a>
+                    <a onclick="showSection('about')">Sobre</a>
                 </nav>
 
                 <div class="header-buttons" id="headerButtons">
@@ -950,6 +1152,9 @@
                         Buscar Voos
                     </button>
                 </div>
+
+                <!-- Flight Results will be displayed here -->
+                <div id="flightResults" class="flight-results"></div>
             </div>
         </section>
 
@@ -1169,6 +1374,42 @@
                 </div>
             </div>
         </section>
+
+        <!-- Destinations Section -->
+        <section id="destinations" class="features-section" style="display: none;">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Destinos Populares</h2>
+                    <p>Descubra os destinos mais procurados pelos nossos passageiros</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <h3>Rio de Janeiro</h3>
+                        <p>Voo direto de São Paulo - A partir de R$ 299</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Salvador</h3>
+                        <p>Voo direto de Brasília - A partir de R$ 459</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Florianópolis</h3>
+                        <p>Voo direto do Rio de Janeiro - A partir de R$ 389</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Miami</h3>
+                        <p>Voo internacional - A partir de R$ 1.899</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Lisboa</h3>
+                        <p>Voo internacional - A partir de R$ 2.299</p>
+                    </div>
+                    <div class="feature-card">
+                        <h3>Buenos Aires</h3>
+                        <p>Voo internacional - A partir de R$ 899</p>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
@@ -1252,6 +1493,75 @@
         </div>
     </div>
 
+    <!-- Painel Lateral de Troca de Perfil -->
+<div id="profilePanel" class="profile-panel">
+  <div class="profile-panel-header">
+    <h3>Trocar Perfil</h3>
+    <button class="close-panel" onclick="toggleProfilePanel()">&times;</button>
+  </div>
+  <div class="profile-options">
+    <label class="profile-option">
+      <input type="radio" name="profile" value="passenger" checked>
+      <div class="profile-content">
+        <div class="profile-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </div>
+        <div class="profile-info">
+          <strong>Passageiro</strong>
+          <span>Cliente padrão</span>
+        </div>
+      </div>
+    </label>
+    
+    <label class="profile-option">
+      <input type="radio" name="profile" value="agent">
+      <div class="profile-content">
+        <div class="profile-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="profile-info">
+          <strong>Agente</strong>
+          <span>Atendimento</span>
+        </div>
+      </div>
+    </label>
+    
+    <label class="profile-option">
+        <input type="radio" name="profile" value="admin">
+        <div class="profile-content">
+            <div class="profile-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+            </div>
+            <div class="profile-info">
+            <strong>Administrador</strong>
+            <span>Gestão do sistema</span>
+            </div>
+        </div>
+        </label>
+    </div>
+    <button class="btn btn-accent btn-full" onclick="applyProfile()">Aplicar Perfil</button>
+    </div>
+
+    <!-- Botão para abrir o painel -->
+    <button id="profilePanelToggle" class="profile-panel-toggle" onclick="toggleProfilePanel()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+    </button>
+
     <script>
         // Data Storage
         const STORAGE_KEYS = {
@@ -1278,6 +1588,13 @@
                         email: 'agente@skylink.com',
                         password: 'agente123',
                         role: 'agent'
+                    },
+                    {
+                        id: 3,
+                        name: 'Passageiro Teste',
+                        email: 'passageiro@skylink.com',
+                        password: 'passageiro123',
+                        role: 'passenger'
                     }
                 ];
                 localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(defaultUsers));
@@ -1294,7 +1611,7 @@
                         time: '08:00',
                         capacity: 150,
                         price: 299.99,
-                        bookings: []
+                        bookings: [101, 102, 103]
                     },
                     {
                         id: 2,
@@ -1305,6 +1622,72 @@
                         time: '18:00',
                         capacity: 150,
                         price: 299.99,
+                        bookings: [104]
+                    },
+                    {
+                        id: 3,
+                        code: 'SK303',
+                        origin: 'Brasília (BSB)',
+                        destination: 'Salvador (SSA)',
+                        date: '2025-04-16',
+                        time: '10:30',
+                        capacity: 180,
+                        price: 459.99,
+                        bookings: [105, 106, 107, 108]
+                    },
+                    {
+                        id: 4,
+                        code: 'SK404',
+                        origin: 'Rio de Janeiro (GIG)',
+                        destination: 'Florianópolis (FLN)',
+                        date: '2025-04-17',
+                        time: '14:15',
+                        capacity: 120,
+                        price: 389.99,
+                        bookings: []
+                    },
+                    {
+                        id: 5,
+                        code: 'SK505',
+                        origin: 'São Paulo (GRU)',
+                        destination: 'Miami (MIA)',
+                        date: '2025-04-20',
+                        time: '22:00',
+                        capacity: 250,
+                        price: 1899.99,
+                        bookings: [109, 110]
+                    },
+                    {
+                        id: 6,
+                        code: 'SK606',
+                        origin: 'São Paulo (GRU)',
+                        destination: 'Lisboa (LIS)',
+                        date: '2025-04-25',
+                        time: '20:30',
+                        capacity: 280,
+                        price: 2299.99,
+                        bookings: [111]
+                    },
+                    {
+                        id: 7,
+                        code: 'SK707',
+                        origin: 'São Paulo (GRU)',
+                        destination: 'Buenos Aires (EZE)',
+                        date: '2025-04-18',
+                        time: '16:45',
+                        capacity: 140,
+                        price: 899.99,
+                        bookings: [112, 113, 114, 115]
+                    },
+                    {
+                        id: 8,
+                        code: 'SK808',
+                        origin: 'Rio de Janeiro (GIG)',
+                        destination: 'Orlando (MCO)',
+                        date: '2025-04-22',
+                        time: '21:15',
+                        capacity: 220,
+                        price: 1599.99,
                         bookings: []
                     }
                 ];
@@ -1312,7 +1695,24 @@
             }
 
             if (!localStorage.getItem(STORAGE_KEYS.BOOKINGS)) {
-                localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify([]));
+                const defaultBookings = [
+                    { id: 101, flightId: 1, userId: 3, passengers: 2, status: 'confirmed', bookingDate: '2025-03-01' },
+                    { id: 102, flightId: 1, userId: 5, passengers: 1, status: 'confirmed', bookingDate: '2025-03-02' },
+                    { id: 103, flightId: 1, userId: 6, passengers: 3, status: 'confirmed', bookingDate: '2025-03-03' },
+                    { id: 104, flightId: 2, userId: 7, passengers: 1, status: 'confirmed', bookingDate: '2025-03-04' },
+                    { id: 105, flightId: 3, userId: 8, passengers: 2, status: 'confirmed', bookingDate: '2025-03-05' },
+                    { id: 106, flightId: 3, userId: 9, passengers: 1, status: 'confirmed', bookingDate: '2025-03-06' },
+                    { id: 107, flightId: 3, userId: 10, passengers: 4, status: 'confirmed', bookingDate: '2025-03-07' },
+                    { id: 108, flightId: 3, userId: 11, passengers: 2, status: 'confirmed', bookingDate: '2025-03-08' },
+                    { id: 109, flightId: 5, userId: 12, passengers: 1, status: 'confirmed', bookingDate: '2025-03-09' },
+                    { id: 110, flightId: 5, userId: 13, passengers: 2, status: 'confirmed', bookingDate: '2025-03-10' },
+                    { id: 111, flightId: 6, userId: 14, passengers: 1, status: 'confirmed', bookingDate: '2025-03-11' },
+                    { id: 112, flightId: 7, userId: 15, passengers: 1, status: 'confirmed', bookingDate: '2025-03-12' },
+                    { id: 113, flightId: 7, userId: 16, passengers: 2, status: 'confirmed', bookingDate: '2025-03-13' },
+                    { id: 114, flightId: 7, userId: 17, passengers: 1, status: 'confirmed', bookingDate: '2025-03-14' },
+                    { id: 115, flightId: 7, userId: 18, passengers: 3, status: 'confirmed', bookingDate: '2025-03-15' }
+                ];
+                localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(defaultBookings));
             }
 
             if (!localStorage.getItem(STORAGE_KEYS.OVERBOOKING_POLICY)) {
@@ -1452,10 +1852,13 @@
                 section.style.display = 'none';
             });
             
-            document.getElementById(sectionId).style.display = 'block';
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+            }
             
-            if (sectionId === 'hero' || sectionId === 'flights' || sectionId === 'about') {
-                document.getElementById('mainContent').scrollIntoView({ behavior: 'smooth' });
+            if (sectionId === 'hero' || sectionId === 'flights' || sectionId === 'about' || sectionId === 'destinations') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
 
@@ -1512,28 +1915,39 @@
             }
             
             // Display results
-            const resultsHTML = filteredFlights.map(flight => `
-                <div class="feature-card">
-                    <h3>Voo ${flight.code}</h3>
-                    <p><strong>Origem:</strong> ${flight.origin}</p>
-                    <p><strong>Destino:</strong> ${flight.destination}</p>
-                    <p><strong>Data:</strong> ${formatDate(flight.date)}</p>
-                    <p><strong>Horário:</strong> ${flight.time}</p>
-                    <p><strong>Preço:</strong> R$ ${flight.price.toFixed(2)}</p>
-                    <p><strong>Assentos disponíveis:</strong> ${flight.capacity - flight.bookings.length}</p>
-                    <button class="btn btn-accent" onclick="bookFlight(${flight.id}, ${passengers})">
-                        Reservar ${passengers} Passageiro(s)
-                    </button>
-                </div>
-            `).join('');
-            
-            document.getElementById('flights').innerHTML += `
-                <div class="container" style="margin-top: 2rem;">
-                    <h2 style="text-align: center; margin-bottom: 2rem;">Resultados da Busca</h2>
-                    <div class="features-grid">
-                        ${resultsHTML}
+            const resultsHTML = filteredFlights.map(flight => {
+                const availableSeats = flight.capacity - flight.bookings.length;
+                const canBook = availableSeats >= parseInt(passengers);
+                
+                return `
+                    <div class="flight-card">
+                        <div class="flight-header">
+                            <div class="flight-route">
+                                <h3>Voo ${flight.code}</h3>
+                                <p><strong>${flight.origin}</strong> → <strong>${flight.destination}</strong></p>
+                                <p>${formatDate(flight.date)} às ${flight.time}</p>
+                            </div>
+                            <div class="flight-price">
+                                R$ ${flight.price.toFixed(2)}
+                            </div>
+                        </div>
+                        <p><strong>Assentos disponíveis:</strong> ${availableSeats}</p>
+                        <p><strong>Passageiros:</strong> ${passengers}</p>
+                        ${canBook ? 
+                            `<button class="btn btn-accent" onclick="bookFlight(${flight.id}, ${passengers})">
+                                Reservar Agora
+                            </button>` :
+                            `<button class="btn btn-ghost" disabled>
+                                Sem assentos suficientes
+                            </button>`
+                        }
                     </div>
-                </div>
+                `;
+            }).join('');
+            
+            document.getElementById('flightResults').innerHTML = `
+                <h3 style="margin-bottom: 1rem;">${filteredFlights.length} voo(s) encontrado(s)</h3>
+                ${resultsHTML || '<p>Nenhum voo encontrado com os critérios de busca.</p>'}
             `;
         }
 
@@ -1559,7 +1973,7 @@
                 id: bookings.length > 0 ? Math.max(...bookings.map(b => b.id)) + 1 : 1,
                 flightId,
                 userId: currentUser.id,
-                passengers,
+                passengers: parseInt(passengers),
                 status: 'confirmed',
                 bookingDate: new Date().toISOString().split('T')[0]
             };
@@ -1574,6 +1988,7 @@
             
             showAlert(`Reserva confirmada para ${passengers} passageiro(s)!`, 'success');
             loadPassengerDashboard();
+            showSection('passengerDashboard');
         }
 
         // Admin Dashboard Functions
@@ -1584,7 +1999,7 @@
             
             // Update stats
             document.getElementById('totalFlights').textContent = flights.length;
-            document.getElementById('totalBookings').textContent = bookings.length;
+            document.getElementById('totalBookings').textContent = bookings.filter(b => b.status === 'confirmed').length;
             
             // Calculate overbooking cases
             const overbookingCases = flights.filter(flight => 
@@ -1789,7 +2204,7 @@
             if (!flight) return;
             
             // Get flight bookings with user info
-            const flightBookings = bookings.filter(b => b.flightId === flightId)
+            const flightBookings = bookings.filter(b => b.flightId === flightId && b.status === 'confirmed')
                 .map(booking => {
                     const user = users.find(u => u.id === booking.userId);
                     return {
@@ -1810,6 +2225,7 @@
                         <div>
                             <strong>${booking.userName}</strong>
                             <p>${booking.userEmail} - ${booking.passengers} passageiro(s)</p>
+                            <small>Reserva: ${formatDate(booking.bookingDate)}</small>
                         </div>
                         <div>
                             ${index >= flight.capacity ? 
@@ -1825,12 +2241,12 @@
         function removePassenger(bookingId) {
             if (confirm('Tem certeza que deseja remover este passageiro?')) {
                 const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
-                const booking = bookings.find(b => b.id === bookingId);
+                const bookingIndex = bookings.findIndex(b => b.id === bookingId);
                 
-                if (booking) {
+                if (bookingIndex !== -1) {
                     // Remove from flight bookings
                     const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
-                    const flight = flights.find(f => f.id === booking.flightId);
+                    const flight = flights.find(f => f.bookings.includes(bookingId));
                     
                     if (flight) {
                         flight.bookings = flight.bookings.filter(b => b !== bookingId);
@@ -1838,7 +2254,7 @@
                     }
                     
                     // Update booking status
-                    booking.status = 'cancelled';
+                    bookings[bookingIndex].status = 'cancelled';
                     localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
                     
                     showAlert('Passageiro removido com sucesso!', 'success');
@@ -1877,13 +2293,20 @@
                 const isOverbooked = flight.bookings.length > flight.capacity;
                 
                 return `
-                    <div class="feature-card ${isOverbooked ? 'alert-warning' : ''}">
-                        <h3>Voo ${flight.code}</h3>
-                        <p><strong>Rota:</strong> ${flight.origin} → ${flight.destination}</p>
-                        <p><strong>Data:</strong> ${formatDate(flight.date)}</p>
-                        <p><strong>Horário:</strong> ${flight.time}</p>
+                    <div class="flight-card ${isOverbooked ? 'alert-warning' : ''}">
+                        <div class="flight-header">
+                            <div class="flight-route">
+                                <h3>Voo ${flight.code}</h3>
+                                <p><strong>${flight.origin}</strong> → <strong>${flight.destination}</strong></p>
+                                <p>${formatDate(flight.date)} às ${flight.time}</p>
+                            </div>
+                            <div class="flight-price">
+                                R$ ${flight.price.toFixed(2)}
+                            </div>
+                        </div>
                         <p><strong>Passageiros:</strong> ${booking.passengers}</p>
                         <p><strong>Status:</strong> ${booking.status === 'confirmed' ? 'Confirmado' : 'Cancelado'}</p>
+                        <p><strong>Data da Reserva:</strong> ${formatDate(booking.bookingDate)}</p>
                         ${isOverbooked ? `
                             <div class="alert alert-warning">
                                 <p><strong>Este voo está com overbooking.</strong></p>
@@ -1898,7 +2321,7 @@
             
             if (userBookings.length === 0) {
                 document.getElementById('passengerBookingsList').innerHTML = `
-                    <div class="feature-card">
+                    <div class="flight-card">
                         <h3>Nenhuma reserva encontrada</h3>
                         <p>Você ainda não fez nenhuma reserva. Explore nossos voos disponíveis!</p>
                         <button class="btn btn-accent" onclick="showSection('flights')">Buscar Voos</button>
@@ -1920,7 +2343,7 @@
             `).join('');
             
             document.getElementById('passengerBookingsList').innerHTML += `
-                <div class="feature-card">
+                <div class="flight-card">
                     <h3>Opções de Compensação</h3>
                     <div class="features-grid">
                         ${optionsHTML}
@@ -1942,12 +2365,12 @@
         function cancelBooking(bookingId) {
             if (confirm('Tem certeza que deseja cancelar esta reserva?')) {
                 const bookings = JSON.parse(localStorage.getItem(STORAGE_KEYS.BOOKINGS) || '[]');
-                const booking = bookings.find(b => b.id === bookingId);
+                const bookingIndex = bookings.findIndex(b => b.id === bookingId);
                 
-                if (booking) {
+                if (bookingIndex !== -1) {
                     // Remove from flight bookings
                     const flights = JSON.parse(localStorage.getItem(STORAGE_KEYS.FLIGHTS) || '[]');
-                    const flight = flights.find(f => f.id === booking.flightId);
+                    const flight = flights.find(f => f.bookings.includes(bookingId));
                     
                     if (flight) {
                         flight.bookings = flight.bookings.filter(b => b !== bookingId);
@@ -1955,7 +2378,7 @@
                     }
                     
                     // Update booking status
-                    booking.status = 'cancelled';
+                    bookings[bookingIndex].status = 'cancelled';
                     localStorage.setItem(STORAGE_KEYS.BOOKINGS, JSON.stringify(bookings));
                     
                     showAlert('Reserva cancelada com sucesso!', 'success');
@@ -1985,7 +2408,119 @@
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('flightDate').min = today;
             document.getElementById('flightDateModal').min = today;
+            
+            // Add click handlers for navigation
+            document.querySelectorAll('.nav a').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+                    showSection(sectionId);
+                });
+            });
         });
+
+        // Funções para o painel de perfil
+        function toggleProfilePanel() {
+        const panel = document.getElementById('profilePanel');
+        const overlay = document.querySelector('.panel-overlay');
+        
+        panel.classList.toggle('active');
+        
+        if (!overlay) {
+            createOverlay();
+        } else {
+            overlay.classList.toggle('active');
+        }
+        }
+
+        function createOverlay() {
+        const overlay = document.createElement('div');
+        overlay.className = 'panel-overlay';
+        overlay.addEventListener('click', toggleProfilePanel);
+        document.body.appendChild(overlay);
+        overlay.classList.add('active');
+        }
+
+        function applyProfile() {
+        const selectedProfile = document.querySelector('input[name="profile"]:checked').value;
+        
+        // Fechar o painel
+        toggleProfilePanel();
+        
+        // Simular login com o perfil selecionado
+        const testUsers = {
+            passenger: { email: 'passageiro@skylink.com', password: 'passageiro123' },
+            agent: { email: 'agente@skylink.com', password: 'agente123' },
+            admin: { email: 'admin@skylink.com', password: 'admin123' }
+        };
+        
+        const user = testUsers[selectedProfile];
+        
+        // Simular o processo de login
+        const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+        const foundUser = users.find(u => u.email === user.email && u.password === user.password);
+        
+        if (foundUser) {
+            currentUser = foundUser;
+            localStorage.setItem('currentUser', JSON.stringify(foundUser));
+            updateUIForUser();
+            showAlert(`Perfil alterado para ${foundUser.role === 'passenger' ? 'Passageiro' : foundUser.role === 'agent' ? 'Agente' : 'Administrador'}!`, 'success');
+        }
+        }
+
+        // Fechar painel com ESC
+        document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const panel = document.getElementById('profilePanel');
+            if (panel.classList.contains('active')) {
+            toggleProfilePanel();
+            }
+        }
+        });
+
+        // Atualizar o radio button baseado no usuário atual
+        function updateProfilePanel() {
+        if (currentUser) {
+            const role = currentUser.role;
+            const radio = document.querySelector(`input[name="profile"][value="${role}"]`);
+            if (radio) {
+            radio.checked = true;
+            }
+        }
+        }
+
+        // Modificar a função updateUIForUser para incluir a atualização do painel
+        // Substitua a função updateUIForUser existente por esta:
+        function updateUIForUser() {
+        const headerButtons = document.getElementById('headerButtons');
+        const userMenu = document.getElementById('userMenu');
+        const userName = document.getElementById('userName');
+        
+        if (currentUser) {
+            headerButtons.style.display = 'none';
+            userMenu.style.display = 'flex';
+            userName.textContent = currentUser.name;
+            
+            // Atualizar o painel de perfil
+            updateProfilePanel();
+            
+            // Show appropriate dashboard
+            if (currentUser.role === 'admin') {
+            showSection('adminDashboard');
+            loadAdminDashboard();
+            } else if (currentUser.role === 'agent') {
+            showSection('agentDashboard');
+            loadAgentDashboard();
+            } else {
+            showSection('passengerDashboard');
+            loadPassengerDashboard();
+            }
+        } else {
+            headerButtons.style.display = 'flex';
+            userMenu.style.display = 'none';
+            showSection('hero');
+        }
+        }
     </script>
 </body>
 </html>
