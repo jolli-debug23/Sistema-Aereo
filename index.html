@@ -819,7 +819,7 @@
 
         .flight-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 1rem;
         }
@@ -836,160 +836,160 @@
 
         /* Painel Lateral de Troca de Perfil */
         .profile-panel {
-        position: fixed;
-        top: 0;
-        right: -350px;
-        width: 320px;
-        height: 100vh;
-        background: var(--card);
-        border-left: 1px solid var(--border);
-        box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
-        z-index: 1000;
-        transition: right 0.3s ease;
-        padding: 1.5rem;
-        display: flex;
-        flex-direction: column;
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 320px;
+            height: 100vh;
+            background: var(--card);
+            border-left: 1px solid var(--border);
+            box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
         }
 
         .profile-panel.active {
-        right: 0;
+            right: 0;
         }
 
         .profile-panel-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1.5rem;
-        padding-bottom: 1rem;
-        border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
         }
 
         .profile-panel-header h3 {
-        margin: 0;
-        color: var(--foreground);
+            margin: 0;
+            color: var(--foreground);
         }
 
         .close-panel {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: var(--muted-foreground);
-        width: 30px;
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 0.25rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--muted-foreground);
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.25rem;
         }
 
         .close-panel:hover {
-        background: var(--muted);
+            background: var(--muted);
         }
 
         .profile-options {
-        flex: 1;
-        margin-bottom: 1.5rem;
+            flex: 1;
+            margin-bottom: 1.5rem;
         }
 
         .profile-option {
-        display: block;
-        margin-bottom: 0.75rem;
-        cursor: pointer;
+            display: block;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
         }
 
         .profile-option input[type="radio"] {
-        display: none;
+            display: none;
         }
 
         .profile-content {
-        display: flex;
-        align-items: center;
-        padding: 1rem;
-        border: 2px solid var(--border);
-        border-radius: 0.75rem;
-        transition: all 0.3s;
-        background: var(--background);
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid var(--border);
+            border-radius: 0.75rem;
+            transition: all 0.3s;
+            background: var(--background);
         }
 
         .profile-option input[type="radio"]:checked + .profile-content {
-        border-color: var(--primary);
-        background: var(--primary);
-        color: var(--primary-foreground);
+            border-color: var(--primary);
+            background: var(--primary);
+            color: var(--primary-foreground);
         }
 
         .profile-option input[type="radio"]:checked + .profile-content .profile-icon {
-        background: rgba(255, 255, 255, 0.2);
-        color: var(--primary-foreground);
+            background: rgba(255, 255, 255, 0.2);
+            color: var(--primary-foreground);
         }
 
         .profile-option input[type="radio"]:checked + .profile-content .profile-info span {
-        color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.8);
         }
 
         .profile-icon {
-        width: 40px;
-        height: 40px;
-        background: var(--muted);
-        border-radius: 0.5rem;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 1rem;
-        color: var(--primary);
+            width: 40px;
+            height: 40px;
+            background: var(--muted);
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--primary);
         }
 
         .profile-info {
-        flex: 1;
+            flex: 1;
         }
 
         .profile-info strong {
-        display: block;
-        font-weight: 600;
-        margin-bottom: 0.25rem;
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
         }
 
         .profile-info span {
-        font-size: 0.875rem;
-        color: var(--muted-foreground);
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
         }
 
         /* Botão de toggle do painel */
         .profile-panel-toggle {
-        position: fixed;
-        top: 50%;
-        right: 0;
-        transform: translateY(-50%);
-        background: var(--primary);
-        color: var(--primary-foreground);
-        border: none;
-        border-radius: 0.5rem 0 0 0.5rem;
-        padding: 0.75rem;
-        cursor: pointer;
-        z-index: 999;
-        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s;
+            position: fixed;
+            top: 50%;
+            right: 0;
+            transform: translateY(-50%);
+            background: var(--primary);
+            color: var(--primary-foreground);
+            border: none;
+            border-radius: 0.5rem 0 0 0.5rem;
+            padding: 0.75rem;
+            cursor: pointer;
+            z-index: 999;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
         }
 
         .profile-panel-toggle:hover {
-        background: var(--accent);
-        padding-right: 1rem;
+            background: var(--accent);
+            padding-right: 1rem;
         }
 
         /* Overlay quando o painel está aberto */
         .panel-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-        display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            display: none;
         }
 
         .panel-overlay.active {
-        display: block;
+            display: block;
         }
     </style>
 </head>
@@ -1423,7 +1423,7 @@
                 <div>
                     <h4>Empresa</h4>
                     <ul>
-                        <li><a href="#">Sobre nós</a></li>
+                        <li><a href="#" onclick="showSection('about')">Sobre nós</a></li>
                         <li><a href="#">Carreiras</a></li>
                         <li><a href="#">Imprensa</a></li>
                     </ul>
@@ -1494,62 +1494,62 @@
     </div>
 
     <!-- Painel Lateral de Troca de Perfil -->
-<div id="profilePanel" class="profile-panel">
-  <div class="profile-panel-header">
-    <h3>Trocar Perfil</h3>
-    <button class="close-panel" onclick="toggleProfilePanel()">&times;</button>
-  </div>
-  <div class="profile-options">
-    <label class="profile-option">
-      <input type="radio" name="profile" value="passenger" checked>
-      <div class="profile-content">
-        <div class="profile-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
+    <div id="profilePanel" class="profile-panel">
+        <div class="profile-panel-header">
+            <h3>Trocar Perfil</h3>
+            <button class="close-panel" onclick="toggleProfilePanel()">&times;</button>
         </div>
-        <div class="profile-info">
-          <strong>Passageiro</strong>
-          <span>Cliente padrão</span>
+        <div class="profile-options">
+            <label class="profile-option">
+                <input type="radio" name="profile" value="passenger" checked>
+                <div class="profile-content">
+                    <div class="profile-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </div>
+                    <div class="profile-info">
+                        <strong>Passageiro</strong>
+                        <span>Cliente padrão</span>
+                    </div>
+                </div>
+            </label>
+            
+            <label class="profile-option">
+                <input type="radio" name="profile" value="agent">
+                <div class="profile-content">
+                    <div class="profile-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                            <circle cx="9" cy="7" r="4"/>
+                            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                        </svg>
+                    </div>
+                    <div class="profile-info">
+                        <strong>Agente</strong>
+                        <span>Atendimento</span>
+                    </div>
+                </div>
+            </label>
+            
+            <label class="profile-option">
+                <input type="radio" name="profile" value="admin">
+                <div class="profile-content">
+                    <div class="profile-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <div class="profile-info">
+                        <strong>Administrador</strong>
+                        <span>Gestão do sistema</span>
+                    </div>
+                </div>
+            </label>
         </div>
-      </div>
-    </label>
-    
-    <label class="profile-option">
-      <input type="radio" name="profile" value="agent">
-      <div class="profile-content">
-        <div class="profile-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-        </div>
-        <div class="profile-info">
-          <strong>Agente</strong>
-          <span>Atendimento</span>
-        </div>
-      </div>
-    </label>
-    
-    <label class="profile-option">
-        <input type="radio" name="profile" value="admin">
-        <div class="profile-content">
-            <div class="profile-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-            </svg>
-            </div>
-            <div class="profile-info">
-            <strong>Administrador</strong>
-            <span>Gestão do sistema</span>
-            </div>
-        </div>
-        </label>
-    </div>
-    <button class="btn btn-accent btn-full" onclick="applyProfile()">Aplicar Perfil</button>
+        <button class="btn btn-accent btn-full" onclick="applyProfile()">Aplicar Perfil</button>
     </div>
 
     <!-- Botão para abrir o painel -->
@@ -1561,6 +1561,8 @@
             <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
         </svg>
     </button>
+
+    <div class="panel-overlay" onclick="toggleProfilePanel()"></div>
 
     <script>
         // Data Storage
@@ -1828,6 +1830,9 @@
                 userMenu.style.display = 'flex';
                 userName.textContent = currentUser.name;
                 
+                // Atualizar o painel de perfil
+                updateProfilePanel();
+                
                 // Show appropriate dashboard
                 if (currentUser.role === 'admin') {
                     showSection('adminDashboard');
@@ -1848,15 +1853,31 @@
 
         // Section Navigation
         function showSection(sectionId) {
-            document.querySelectorAll('section').forEach(section => {
-                section.style.display = 'none';
+            // Hide all sections first
+            const sections = ['hero', 'flights', 'about', 'destinations', 'adminDashboard', 'agentDashboard', 'passengerDashboard'];
+            sections.forEach(id => {
+                const section = document.getElementById(id);
+                if (section) {
+                    section.style.display = 'none';
+                }
             });
             
+            // Show the target section
             const targetSection = document.getElementById(sectionId);
             if (targetSection) {
                 targetSection.style.display = 'block';
+                
+                // Special handling for dashboard sections
+                if (sectionId === 'adminDashboard' && currentUser && currentUser.role === 'admin') {
+                    loadAdminDashboard();
+                } else if (sectionId === 'agentDashboard' && currentUser && currentUser.role === 'agent') {
+                    loadAgentDashboard();
+                } else if (sectionId === 'passengerDashboard' && currentUser && currentUser.role === 'passenger') {
+                    loadPassengerDashboard();
+                }
             }
             
+            // Scroll to top for main sections
             if (sectionId === 'hero' || sectionId === 'flights' || sectionId === 'about' || sectionId === 'destinations') {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
@@ -1873,14 +1894,25 @@
 
         // Alert System
         function showAlert(message, type) {
+            // Remove any existing alerts first
+            const existingAlerts = document.querySelectorAll('.alert');
+            existingAlerts.forEach(alert => alert.remove());
+            
             const alert = document.createElement('div');
             alert.className = `alert alert-${type}`;
             alert.textContent = message;
+            alert.style.position = 'fixed';
+            alert.style.top = '100px';
+            alert.style.right = '20px';
+            alert.style.zIndex = '1000';
+            alert.style.maxWidth = '300px';
             
             document.body.appendChild(alert);
             
             setTimeout(() => {
-                alert.remove();
+                if (alert.parentNode) {
+                    alert.remove();
+                }
             }, 5000);
         }
 
@@ -2393,6 +2425,53 @@
             return new Date(dateString).toLocaleDateString('pt-BR', options);
         }
 
+        // Profile Panel Functions
+        function toggleProfilePanel() {
+            const panel = document.getElementById('profilePanel');
+            const overlay = document.querySelector('.panel-overlay');
+            
+            panel.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function applyProfile() {
+            const selectedProfile = document.querySelector('input[name="profile"]:checked').value;
+            
+            // Fechar o painel
+            toggleProfilePanel();
+            
+            // Simular login com o perfil selecionado
+            const testUsers = {
+                passenger: { email: 'passageiro@skylink.com', password: 'passageiro123' },
+                agent: { email: 'agente@skylink.com', password: 'agente123' },
+                admin: { email: 'admin@skylink.com', password: 'admin123' }
+            };
+            
+            const user = testUsers[selectedProfile];
+            
+            // Simular o processo de login
+            const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
+            const foundUser = users.find(u => u.email === user.email && u.password === user.password);
+            
+            if (foundUser) {
+                currentUser = foundUser;
+                localStorage.setItem('currentUser', JSON.stringify(foundUser));
+                updateUIForUser();
+                showAlert(`Perfil alterado para ${foundUser.role === 'passenger' ? 'Passageiro' : foundUser.role === 'agent' ? 'Agente' : 'Administrador'}!`, 'success');
+            }
+        }
+
+        // Atualizar o radio button baseado no usuário atual
+        function updateProfilePanel() {
+            if (currentUser) {
+                const role = currentUser.role;
+                const radio = document.querySelector(`input[name="profile"][value="${role}"]`);
+                if (radio) {
+                    radio.checked = true;
+                }
+            }
+        }
+
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             initializeData();
@@ -2417,110 +2496,26 @@
                     showSection(sectionId);
                 });
             });
-        });
-
-        // Funções para o painel de perfil
-        function toggleProfilePanel() {
-        const panel = document.getElementById('profilePanel');
-        const overlay = document.querySelector('.panel-overlay');
-        
-        panel.classList.toggle('active');
-        
-        if (!overlay) {
-            createOverlay();
-        } else {
-            overlay.classList.toggle('active');
-        }
-        }
-
-        function createOverlay() {
-        const overlay = document.createElement('div');
-        overlay.className = 'panel-overlay';
-        overlay.addEventListener('click', toggleProfilePanel);
-        document.body.appendChild(overlay);
-        overlay.classList.add('active');
-        }
-
-        function applyProfile() {
-        const selectedProfile = document.querySelector('input[name="profile"]:checked').value;
-        
-        // Fechar o painel
-        toggleProfilePanel();
-        
-        // Simular login com o perfil selecionado
-        const testUsers = {
-            passenger: { email: 'passageiro@skylink.com', password: 'passageiro123' },
-            agent: { email: 'agente@skylink.com', password: 'agente123' },
-            admin: { email: 'admin@skylink.com', password: 'admin123' }
-        };
-        
-        const user = testUsers[selectedProfile];
-        
-        // Simular o processo de login
-        const users = JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]');
-        const foundUser = users.find(u => u.email === user.email && u.password === user.password);
-        
-        if (foundUser) {
-            currentUser = foundUser;
-            localStorage.setItem('currentUser', JSON.stringify(foundUser));
-            updateUIForUser();
-            showAlert(`Perfil alterado para ${foundUser.role === 'passenger' ? 'Passageiro' : foundUser.role === 'agent' ? 'Agente' : 'Administrador'}!`, 'success');
-        }
-        }
-
-        // Fechar painel com ESC
-        document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            const panel = document.getElementById('profilePanel');
-            if (panel.classList.contains('active')) {
-            toggleProfilePanel();
-            }
-        }
-        });
-
-        // Atualizar o radio button baseado no usuário atual
-        function updateProfilePanel() {
-        if (currentUser) {
-            const role = currentUser.role;
-            const radio = document.querySelector(`input[name="profile"][value="${role}"]`);
-            if (radio) {
-            radio.checked = true;
-            }
-        }
-        }
-
-        // Modificar a função updateUIForUser para incluir a atualização do painel
-        // Substitua a função updateUIForUser existente por esta:
-        function updateUIForUser() {
-        const headerButtons = document.getElementById('headerButtons');
-        const userMenu = document.getElementById('userMenu');
-        const userName = document.getElementById('userName');
-        
-        if (currentUser) {
-            headerButtons.style.display = 'none';
-            userMenu.style.display = 'flex';
-            userName.textContent = currentUser.name;
             
-            // Atualizar o painel de perfil
-            updateProfilePanel();
+            // Add click handlers for footer links
+            document.querySelectorAll('.footer a[onclick]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sectionId = this.getAttribute('onclick').match(/'([^']+)'/)[1];
+                    showSection(sectionId);
+                });
+            });
             
-            // Show appropriate dashboard
-            if (currentUser.role === 'admin') {
-            showSection('adminDashboard');
-            loadAdminDashboard();
-            } else if (currentUser.role === 'agent') {
-            showSection('agentDashboard');
-            loadAgentDashboard();
-            } else {
-            showSection('passengerDashboard');
-            loadPassengerDashboard();
-            }
-        } else {
-            headerButtons.style.display = 'flex';
-            userMenu.style.display = 'none';
-            showSection('hero');
-        }
-        }
+            // Close profile panel with ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    const panel = document.getElementById('profilePanel');
+                    if (panel.classList.contains('active')) {
+                        toggleProfilePanel();
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
